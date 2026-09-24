@@ -6,7 +6,7 @@
   <title>Spotifly — Favoritos</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-requires-auth>
   <div class="app">
     <aside class="sidebar">
       <div class="brand">🎵 Spotifly</div>
@@ -19,22 +19,27 @@
       <a href="playlists.html" class="btn new-playlist-btn">+ Nueva playlist</a>
       <div class="sidebar-section">
         <h4>Tus playlists</h4>
-        <div></div>
+        <div id="sidebarPlaylists"></div>
       </div>
     </aside>
 
     <div class="main">
       <header class="topbar">
         <div></div>
-        <div class="user-tag">Usuario</div>
+        <div class="user-tag">
+          <span id="userTag"></span>
+          <button class="secondary" id="logoutBtn">Cerrar sesión</button>
+        </div>
       </header>
 
       <div class="content">
         <h2 class="section-title">Mis favoritos</h2>
         <p>Canciones que marcaste con ♥ desde el catálogo.</p>
-        <div></div>
+        <div id="favoritosWrap"></div>
       </div>
     </div>
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

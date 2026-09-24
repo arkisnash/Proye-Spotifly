@@ -6,7 +6,7 @@
   <title>Spotifly — Playlists</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-requires-auth>
   <div class="app">
     <aside class="sidebar">
       <div class="brand">🎵 Spotifly</div>
@@ -19,28 +19,33 @@
       <a href="playlists.html" class="btn new-playlist-btn">+ Nueva playlist</a>
       <div class="sidebar-section">
         <h4>Tus playlists</h4>
-        <div></div>
+        <div id="sidebarPlaylists"></div>
       </div>
     </aside>
 
     <div class="main">
       <header class="topbar">
         <div></div>
-        <div class="user-tag">Usuario</div>
+        <div class="user-tag">
+          <span id="userTag"></span>
+          <button class="secondary" id="logoutBtn">Cerrar sesión</button>
+        </div>
       </header>
 
       <div class="content">
         <h2 class="section-title">Mis playlists</h2>
         <p>Crea playlists y agrégales canciones desde el catálogo.</p>
 
-        <form class="playlist-create">
-          <input type="text" placeholder="Nombre de la nueva playlist">
+        <form id="nuevaPlaylistForm" class="playlist-create">
+          <input type="text" id="nuevaPlaylistNombre" placeholder="Nombre de la nueva playlist">
           <button type="submit">Crear</button>
         </form>
 
-        <div></div>
+        <div id="playlistsWrap"></div>
       </div>
     </div>
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

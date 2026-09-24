@@ -4,6 +4,7 @@
         <meta charset="UTD-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Spotifly - Catálogo</title>
+        <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
       <div class="app">
@@ -24,13 +25,24 @@
 
         <div class="main">
           <header class="topbar">
-            <div></div>
-            <div class="user-tag">Usuario</div>
+            <input type="text" id="buscador" class="search-input" placeholder="Buscar canciones...">
+            <div class="user-tag">
+            <span id="userTag"></span>
+            <button class="secondary" id="logoutBtn">Cerrar sesión</button>
+            </div>
           </header>
-          <div class="content">
-            <h2 class="section-title">Catálogo</h2>
-          </div>
+
+            <div class="pill-filters">
+                <button class="pill active" id="pillTodos">Todos</button>
+                <button class="pill" id="pillFavoritos">Favoritos</button>
+            </div>
+
+            <div class="content">
+                <h2 class="section-title">Catálogo</h2>
+                <div class="grid" id="catalogoGrid"></div>
+            </div>
         </div>
       </div>
+        <script src="js/script.js"></script>
     </body>
 </html>

@@ -6,6 +6,55 @@
   <title>Spotifly — Admin</title>
 </head>
 <body>
-  <h1>Panel de administración</h1>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">🎵 Spotifly</div>
+      <nav>
+        <a href="dashboard.html"><span class="icon">🏠</span> Catálogo</a>
+        <a href="favoritos.html"><span class="icon">♡</span> Favoritos</a>
+        <a href="historial.html"><span class="icon">🕘</span> Historial</a>
+        <a href="admin.html" class="active"><span class="icon">⚙</span> Admin</a>
+      </nav>
+      <a href="playlists.html" class="btn new-playlist-btn">+ Nueva playlist</a>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div></div>
+        <div class="user-tag">Usuario</div>
+      </header>
+
+      <div class="content">
+        <h2 class="section-title">Panel de administración</h2>
+        <p>Gestiona artistas y canciones, y consulta información general de uso.</p>
+
+        <div class="stat-row">
+          <div class="stat-box"><div class="num">0</div><div class="label">Canciones totales</div></div>
+          <div class="stat-box"><div class="num">0</div><div class="label">Canciones activas</div></div>
+          <div class="stat-box"><div class="num">0</div><div class="label">Artistas registrados</div></div>
+        </div>
+
+        <div class="section">
+          <h2>Artistas</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nombre</th><th>Estado</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Canciones</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Título</th><th>Artista</th><th>Estado</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

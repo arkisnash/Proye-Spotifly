@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTD-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Spotifly - Catálogo</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+      <div class="app">
+        <aside class="sidebar">
+          <div class="brand">🎵 Spotifly</div>
+          <nav>
+            <a href="dashboard.html" class="active"><span class="icon">🏠</span> Catálogo</a>
+            <a href="favoritos.html"><span class="icon">♡</span> Favoritos</a>
+            <a href="historial.html"><span class="icon">🕘</span> Historial</a>
+            <a href="admin.html"><span class="icon">⚙</span> Admin</a>
+          </nav>
+          <a href="playlists.html" class="btn new-playlist-btn">+ Nueva playlist</a>
+          <div class="sidebar-section">
+            <h4>Tus playlists</h4>
+            <div id="sidebarPlaylists"></div>
+          </div>
+        </aside>
+
+        <div class="main">
+          <header class="topbar">
+            <input type="text" id="buscador" class="search-input" placeholder="Buscar canciones...">
+            <div class="user-tag">
+            <span id="userTag"></span>
+            <button class="secondary" id="logoutBtn">Cerrar sesión</button>
+            </div>
+          </header>
+
+            <div class="pill-filters">
+                <button class="pill active" id="pillTodos">Todos</button>
+                <button class="pill" id="pillFavoritos">Favoritos</button>
+            </div>
+
+            <div class="content">
+                <h2 class="section-title">Catálogo</h2>
+                <div class="grid" id="catalogoGrid"></div>
+            </div>
+        </div>
+      </div>
+        <script src="js/script.js"></script>
+    </body>
+</html>

@@ -4,9 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spotifly — Crear cuenta</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <div class="auth-wrap">
+    <h1>Crear cuenta</h1>
+    <p>Regístrate para empezar a escuchar.</p>
+
+    <form id="registroForm">
+      <label for="regNombre">Nombre</label>
+      <input type="text" id="regNombre" placeholder="Tu nombre">
+
+      <label for="regCorreo">Correo</label>
+      <input type="email" id="regCorreo" placeholder="tucorreo@ejemplo.com">
+
+      <label for="regClave">Contraseña</label>
+      <input type="password" id="regClave" placeholder="Mínimo 6 caracteres">
+
+      <div class="form-error" id="registroError"></div>
+      <div class="form-error" id="registroExito" style="color: var(--success);"></div>
+
+      <button type="submit" class="form-submit">Crear cuenta</button>
+    </form>
+
+    <div class="form-footer">
+      ¿Ya tienes cuenta? <a href="index.html">Inicia sesión</a>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
 </body>
 </html>

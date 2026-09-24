@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotifly — Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-requires-auth>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">🎵 Spotifly</div>
+      <nav>
+        <a href="dashboard.html"><span class="icon">🏠</span> Catálogo</a>
+        <a href="favoritos.html"><span class="icon">♡</span> Favoritos</a>
+        <a href="historial.html"><span class="icon">🕘</span> Historial</a>
+        <a href="admin.html" class="active"><span class="icon">⚙</span> Admin</a>
+      </nav>
+      <a href="playlists.html" class="btn new-playlist-btn">+ Nueva playlist</a>
+      <div class="sidebar-section">
+        <h4>Tus playlists</h4>
+        <div id="sidebarPlaylists"></div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div></div>
+        <div class="user-tag">
+          <span id="userTag"></span>
+          <button class="secondary" id="logoutBtn">Cerrar sesión</button>
+        </div>
+      </header>
+
+      <div class="content" id="adminWrap">
+        <h2 class="section-title">Panel de administración</h2>
+        <p>Gestiona artistas y canciones, y consulta información general de uso.</p>
+
+        <div class="stat-row">
+          <div class="stat-box"><div class="num" id="statCanciones">0</div><div class="label">Canciones totales</div></div>
+          <div class="stat-box"><div class="num" id="statActivas">0</div><div class="label">Canciones activas</div></div>
+          <div class="stat-box"><div class="num" id="statArtistas">0</div><div class="label">Artistas registrados</div></div>
+        </div>
+
+        <div class="section">
+          <h2>Artistas</h2>
+          <form id="nuevoArtistaForm" class="inline-form">
+            <input type="text" id="nuevoArtistaNombre" placeholder="Nombre del nuevo artista">
+            <button type="submit">Agregar artista</button>
+          </form>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nombre</th><th>Estado</th><th></th></tr></thead>
+              <tbody id="tablaArtistas"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Canciones</h2>
+          <form id="nuevaCancionForm" class="inline-form">
+            <input type="text" id="nuevaCancionTitulo" placeholder="Título de la canción">
+            <select id="nuevaCancionArtista"></select>
+            <button type="submit">Agregar canción</button>
+          </form>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Título</th><th>Artista</th><th>Estado</th><th></th></tr></thead>
+              <tbody id="tablaCanciones"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

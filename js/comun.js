@@ -115,3 +115,22 @@ function pintarNavbar() {
   }
 }
 pintarNavbar();
+
+function pintarSidebarPlaylists() {
+  var contenedor = document.getElementById("sidebarPlaylists");
+  if (!contenedor) return;
+
+  var playlists = getPlaylists();
+
+  if (playlists.length === 0) {
+    contenedor.innerHTML = '<span class="sidebar-playlist-item">Sin playlists aún</span>';
+    return;
+  }
+
+  var html = "";
+  for (var i = 0; i < playlists.length; i++) {
+    html += '<a href="playlists.html" class="sidebar-playlist-item">' + playlists[i].nombre + "</a>";
+  }
+  contenedor.innerHTML = html;
+}
+pintarSidebarPlaylists();

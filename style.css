@@ -55,7 +55,7 @@ a {
 }
 
 
-/* diseño del cuerpo de la paguina */
+/* diseño del cuerpo de la pagina */
 .main {
   flex: 1;
   overflow-y: auto;
@@ -80,11 +80,20 @@ a {
 }
 
 #logoutBtn {
-  background: transparent;
+  background: gray;
+  border: none;
   color: white;
   padding: 6px 12px;
+   border-radius: 16px;
 }
 
+.pill {
+  background-color: gray;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 16px;
+}
 
 
 

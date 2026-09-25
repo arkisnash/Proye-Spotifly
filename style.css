@@ -25,3 +25,33 @@ a {
   color: rgb(49, 49, 223);
 }
 
+/* diseño de la app */
+
+.app {
+  height: 100vh;
+  display: flex;
+}
+
+/* diseño de la barra lateral */
+.sidebar {
+  width: 240px;
+  background-color: black;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.brand {
+  font-size: 2rem;
+  font-weight: bold;
+  display: contents;
+}
+
+

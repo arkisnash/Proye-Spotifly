@@ -3,9 +3,7 @@
 ### Nombre proyecto: Spotifly
 ### Integrantes: Benjamín Ayala, Sebastián Pino, Thomas Cisternas.
 ### Profesor: Roberto Román
-<br>
-<br>
-### Como ejecutar la pagina web
+### Como ejecutar la pagina web 
 1. Estando en el repositorio, verificar que estemos en el main.
 2. Abrir un nuevo codespace.
 3. Con el visual studio code ya abierto, nos dirigimos al apartado de la izquierda y abrimos el apartado de extensiones.

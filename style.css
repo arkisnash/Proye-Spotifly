@@ -55,3 +55,36 @@ a {
 }
 
 
+/* diseño del cuerpo de la paguina */
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-input {
+  background-color: rgb(255, 252, 252);
+  border: none;
+  border-radius: 18px;
+  padding: 10px 16px;
+  width: 300px;
+}
+
+#logoutBtn {
+  background: transparent;
+  color: white;
+  padding: 6px 12px;
+}
+
+
+
+

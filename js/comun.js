@@ -92,3 +92,26 @@ function inicial(texto) {
     return "?";
   }
 }
+function protegerPagina() {
+  var necesitaSesion = document.body.hasAttribute("data-requires-auth");
+  if (necesitaSesion && !getUser()) {
+    window.location.href = "index.html";
+  }
+}
+protegerPagina();
+
+function pintarNavbar() {
+  var tag = document.getElementById("userTag");
+  if (tag && getUser()) {
+    tag.textContent = "Hola, " + getUser();
+  }
+
+  var logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function () {
+      localStorage.removeItem("spotifly_user");
+      window.location.href = "index.html";
+    });
+  }
+}
+pintarNavbar();

@@ -68,3 +68,27 @@ function savePlaylists(lista) {
 function saveHistory(lista) {
   localStorage.setItem("spotifly_history", JSON.stringify(lista));
 }
+function artistName(artistaId) {
+  var artistas = getArtists();
+  var nombreEncontrado = "Desconocido";
+  for (var i = 0; i < artistas.length; i++) {
+    if (artistas[i].id === artistaId) {
+      nombreEncontrado = artistas[i].nombre;
+    }
+  }
+  return nombreEncontrado;
+}
+
+var PALETA = ["#8b6cf0", "#f0687a", "#5fd192", "#f0b95c", "#5cb8f0", "#c06cf0"];
+
+function colorFor(id) {
+  return PALETA[id % PALETA.length];
+}
+
+function inicial(texto) {
+  if (texto) {
+    return texto.charAt(0).toUpperCase();
+  } else {
+    return "?";
+  }
+}

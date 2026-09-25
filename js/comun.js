@@ -34,3 +34,37 @@ function seedData() {
   }
 }
 seedData();
+function getArtists() {
+  return JSON.parse(localStorage.getItem("spotifly_artists"));
+}
+function getSongs() {
+  return JSON.parse(localStorage.getItem("spotifly_songs"));
+}
+function getFavorites() {
+  return JSON.parse(localStorage.getItem("spotifly_favorites"));
+}
+function getPlaylists() {
+  return JSON.parse(localStorage.getItem("spotifly_playlists"));
+}
+function getHistory() {
+  return JSON.parse(localStorage.getItem("spotifly_history"));
+}
+function getUser() {
+  return localStorage.getItem("spotifly_user");
+}
+
+function saveArtists(lista) {
+  localStorage.setItem("spotifly_artists", JSON.stringify(lista));
+}
+function saveSongs(lista) {
+  localStorage.setItem("spotifly_songs", JSON.stringify(lista));
+}
+function saveFavorites(lista) {
+  localStorage.setItem("spotifly_favorites", JSON.stringify(lista));
+}
+function savePlaylists(lista) {
+  localStorage.setItem("spotifly_playlists", JSON.stringify(lista));
+}
+function saveHistory(lista) {
+  localStorage.setItem("spotifly_history", JSON.stringify(lista));
+}

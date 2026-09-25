@@ -51,6 +51,86 @@ if (catalogoGrid) {
     }
     catalogoGrid.innerHTML = html;
   }
+    window.reproducir = function (cancionId) {
+    var canciones = getSongs();
+    var cancionEncontrada = null;
+    for (var i = 0; i < canciones.length; i++) {
+      if (canciones[i].id === cancionId) cancionEncontrada = canciones[i];
+    }
+
+    var historial = getHistory();
+    historial.unshift({
+      cancionId: cancionEncontrada.id,
+      titulo: cancionEncontrada.titulo,
+      artista: artistName(cancionEncontrada.artistaId),
+      fecha: new Date().toLocaleString()
+    });
+    saveHistory(historial);
+    alert("Reproduciendo: " + cancionEncontrada.titulo);
+  };
+
+  window.alternarFavorito = function (cancionId) {
+    var favoritos = getFavorites();
+    var yaEsFavorito = favoritos.indexOf(cancionId) !== -1;
+    var nuevaLista = [];
+
+    if (yaEsFavorito) {
+      for (var i = 0; i < favoritos.length; i++) {
+        if (favoritos[i] !== cancionId) nuevaLista.push(favoritos[i]);
+      }
+    } else {
+      for (var j = 0; j < favoritos.length; j++) nuevaLista.push(favoritos[j]);
+      nuevaLista.push(cancionId);
+    }
+
+    saveFavorites(nuevaLista);
+    renderCatalogo(document.getElementById("buscador").value);
+  };
+
+  window.agregarAPlaylist = function (cancionId) {
+    var playlists = getPlaylists();
+    if (playlists.length === 0) {
+      alert("Primero crea una playlist en la sección Playlists.");
+      return;
+    }
+
+    var textoOpciones = "";
+    for (var i = 0; i < playlists.length; i++) {
+      textoOpciones += (i + 1) + ". " + playlists[i].nombre + "\n";
+    }
+
+    var eleccion = prompt("¿A qué playlist agregar esta canción?\n" + textoOpciones);
+    var indice = parseInt(eleccion, 10) - 1;
+    if (isNaN(indice) || !playlists[indice]) return;
+
+    var yaEstaEnPlaylist = playlists[indice].canciones.indexOf(cancionId) !== -1;
+    if (!yaEstaEnPlaylist) {
+      playlists[indice].canciones.push(cancionId);
+      savePlaylists(playlists);
+      alert("Agregada a " + playlists[indice].nombre);
+    }
+  };
+
+  document.getElementById("buscador").addEventListener("input", function (evento) {
+    renderCatalogo(evento.target.value);
+  });
+
+  var pillTodos = document.getElementById("pillTodos");
+  var pillFavoritos = document.getElementById("pillFavoritos");
+  if (pillTodos && pillFavoritos) {
+    pillTodos.addEventListener("click", function () {
+      soloFavoritos = false;
+      pillTodos.classList.add("active");
+      pillFavoritos.classList.remove("active");
+      renderCatalogo(document.getElementById("buscador").value);
+    });
+    pillFavoritos.addEventListener("click", function () {
+      soloFavoritos = true;
+      pillFavoritos.classList.add("active");
+      pillTodos.classList.remove("active");
+      renderCatalogo(document.getElementById("buscador").value);
+    });
+  }
 
   renderCatalogo("");
 }

@@ -79,6 +79,14 @@ a {
   width: 300px;
 }
 
+.topbar{
+   width: 1530px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    box-sizing: ;
+}
+
 #logoutBtn {
   background: gray;
   border: none;
@@ -94,6 +102,4 @@ a {
   padding: 8px 16px;
   border-radius: 16px;
 }
-
-
 

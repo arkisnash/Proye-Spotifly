@@ -1,19 +1,40 @@
-## Spotifly
-#### proyecto desarrollo web
-### Nombre proyecto: Spotifly
-### Integrantes: Benjamín Ayala, Sebastián Pino, Thomas Cisternas.
-### Profesor: Roberto Román
-### Como ejecutar la pagina web 
-1. Estando en el repositorio, verificar que estemos en el main.
-2. Abrir un nuevo codespace.
-3. Con el visual studio code ya abierto, nos dirigimos al apartado de la izquierda y abrimos el apartado de extensiones.
-4. Buscamos y descargamos la extensión de Live Server. <br>
-    <img width="288" height="109" alt="image" src="https://github.com/user-attachments/assets/314a1035-1639-40fe-923d-77c8311bcf35" />
-5. Con la extensión ya instalada, nos dirigimos haca abajo a la derecha en el apartado de "Go Live" abriendo la visualización de la pagina web. <br>
- <img width="188" height="72" alt="image" src="https://github.com/user-attachments/assets/4f3b4c47-1ecb-4b13-9be8-cdda15ebd21f" />  <br>
-6. Al entrar en la pagina web podremos acceder al apartado de login y registro, pero para acceder al resto de la aplicación, en el apartado de login iniciaremos con un correo cualquiera y una contraseña de 6 digitos <br>
- <img width="683" height="396" alt="image" src="https://github.com/user-attachments/assets/cb5a491a-7ab0-49fc-b2d7-7410eecfee60" />
+# Beat Sound Track (BST)
 
+App de música (Entrega 2, CIT2008). Frontend con Vite, Alpine.js y Tailwind CSS; los datos son simulados (mocks) y se acceden solo a través de `src/api/`.
 
+**Integrantes:** (completar)
 
+## Requisitos y ejecución
+Node.js 20.19 o superior.
 
+1. `npm install`
+2. `npm run dev` y abrir la dirección que muestra la terminal (ej.: http://localhost:5173)
+
+## Credenciales de prueba
+- Usuario: `usuario@bst.cl` / `bst12345`
+- Administrador: `admin@bst.cl` / `admin123`
+
+## Estructura
+- `src/vistas/`: una vista por archivo (`.html` y, si hace falta, un `.js` con `Alpine.data`).
+- `src/api/index.js`: capa de servicios (latencia 300-800 ms, formato `{ ok, status, data, error }`, escrituras en `localStorage`). `api.config.probabilidadFallo` fuerza errores.
+- `public/mocks/`: un JSON por recurso.
+- `src/css/app.css`: paleta clara y oscura (variables).
+- `ia/`: registro del uso de IA.
+
+## Endpoints simulados
+| Función | Método | Ruta equivalente | Descripción |
+|---|---|---|---|
+| `canciones.listar({busqueda})` | GET | /api/canciones | Lista canciones con búsqueda opcional |
+| `canciones.obtener(id)` | GET | /api/canciones/:id | Una canción o error 404 |
+| `canciones.crear(datos)` / `actualizar(id, datos)` / `eliminar(id)` | POST / PUT / DELETE | /api/canciones[/:id] | Escritura simulada |
+| `playlists.*`, `generos.*`, `usuarios.*` | (igual que canciones) | /api/playlists, /api/generos, /api/usuarios | CRUD genérico |
+| `auth.iniciarSesion({correo, clave})` | POST | /api/auth/login | Devuelve el usuario o 401 |
+| `auth.registrar({nombre, correo, clave})` | POST | /api/auth/registro | Crea usuario (201) o 409 |
+
+## Vistas
+`#/login`, `#/registro`, `#/` (inicio), `#/explorar`, `#/biblioteca`, `#/cancion/:id`, `#/playlist/:id`, `#/perfil`, `#/configuracion`, `#/admin` (solo rol admin).
+
+## Reglas del equipo
+- Cada uno trabaja en su rama (`feature/...`) y une a `main` con pull request.
+- Cada integrante edita solo sus vistas; el router, el layout y la capa `api` se cambian avisando.
+- Todo código obtenido con IA se marca con `[IA] inicio` / `[IA] fin`, se registra en `ia/` y el commit lleva `[IA]`.

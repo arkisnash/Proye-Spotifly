@@ -1,0 +1,2 @@
+[{"id":1,"nombre":"Admin BST","correo":"admin@bst.cl","clave":"admin123","rol":"admin"},
+{"id":2,"nombre":"Usuario de prueba","correo":"usuario@bst.cl","clave":"bst12345","rol":"usuario"}]

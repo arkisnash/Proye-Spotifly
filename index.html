@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beat Sound Track</title>
+  <link rel="icon" href="./logo.png" />
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body class="bg-fondo text-texto">
+<div class="flex min-h-screen" x-data="{ menu: false }" @hashchange.window="menu = false">
+  <!-- Menú lateral: solo con sesión iniciada; en móvil se abre con el botón de hamburguesa -->
+  <aside x-show="$store.sesion.usuario" aria-label="Navegación principal"
+    class="fixed inset-y-0 left-0 z-30 w-60 shrink-0 border-r border-borde bg-lateral p-4 transition-transform md:sticky md:top-0 md:h-screen md:translate-x-0"
+    :class="menu ? '' : '-translate-x-full'">
+    <a href="#/" class="mb-6 flex items-center gap-2 font-semibold text-acento">
+      <img src="./logo.png" alt="" class="size-8 rounded-lg" /> Beat Sound Track
+    </a>
+    <nav class="flex flex-col gap-1">
+      <template x-for="l in [['','Inicio'],['explorar','Explorar'],['biblioteca','Biblioteca'],['perfil','Perfil'],['configuracion','Configuración']]" :key="l[0]">
+        <a :href="'#/' + l[0]" x-text="l[1]" class="rounded-lg px-3 py-2 hover:bg-superficie"
+           :class="($store.router.ruta === (l[0] || 'inicio')) && 'bg-superficie'"
+           :aria-current="($store.router.ruta === (l[0] || 'inicio')) ? 'page' : null"></a>
+      </template>
+      <a x-show="$store.sesion.usuario?.rol === 'admin'" href="#/admin" class="rounded-lg px-3 py-2 hover:bg-superficie">Administración</a>
+      <button @click="$store.sesion.salir()" class="rounded-lg px-3 py-2 text-left hover:bg-superficie">Cerrar sesión</button>
+    </nav>
+  </aside>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header x-show="$store.sesion.usuario" class="flex items-center gap-3 p-4">
+      <button class="rounded-lg border border-campo p-2 md:hidden" aria-label="Abrir menú" :aria-expanded="menu" @click="menu = !menu">☰</button>
+      <label class="sr-only" for="buscar">Buscar canciones, artistas o géneros</label>
+      <input id="buscar" type="search" placeholder="Buscar canciones, artistas o géneros" x-model="$store.router.busqueda"
+        @keydown.enter="location.hash = '#/explorar'"
+        class="w-full max-w-xl rounded-lg border border-campo bg-superficie px-4 py-2 placeholder:text-texto-2" />
+      <button class="ml-auto rounded-full border border-campo p-2" @click="$store.tema.alternar()"
+        :aria-label="$store.tema.oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'" x-text="$store.tema.oscuro ? '☀' : '☾'"></button>
+    </header>
+    <main class="flex-1 pb-24" x-html="$store.router.html"></main>
+  </div>
+
+  <!-- Barra del reproductor (pendiente: Persona 3) -->
+  <footer x-show="$store.sesion.usuario" class="fixed inset-x-0 bottom-0 z-20 border-t border-borde bg-lateral px-4 py-3 text-sm text-texto-2 md:pl-64">
+    Reproductor: sin canción seleccionada
+  </footer>
+
+  <div class="fixed right-4 top-4 z-50 flex flex-col gap-2" role="status" aria-live="polite">
+    <template x-for="t in $store.toast.items" :key="t.id">
+      <div class="rounded-lg border border-campo bg-superficie px-4 py-2 shadow-lg" x-text="t.texto"></div>
+    </template>
+  </div>
+</div>
+</body>
+</html>

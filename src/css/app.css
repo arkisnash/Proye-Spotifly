@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Paleta con contraste revisado (WCAG AA). Modo claro por defecto; .dark cambia las variables. */
+:root {
+  --fondo: #faf8ff; --lateral: #f1ecfb; --superficie: #efe9fb; --borde: #ddd3f2; --campo: #8d7bb5;
+  --acento: #7c3aed; --boton: #7c3aed; --texto: #1b1030; --texto-2: #5b4a82;
+}
+.dark {
+  --fondo: #140a20; --lateral: #0d0812; --superficie: #2a1b3d; --borde: #493264; --campo: #7a5aa8;
+  --acento: #8f60ff; --boton: #7c3aed; --texto: #faf8ff; --texto-2: #a78bfa;
+}
+/* Tailwind genera bg-fondo, text-texto, border-borde, etc. a partir de estas variables */
+@theme inline {
+  --color-fondo: var(--fondo); --color-lateral: var(--lateral); --color-superficie: var(--superficie);
+  --color-borde: var(--borde); --color-campo: var(--campo); --color-acento: var(--acento);
+  --color-boton: var(--boton); --color-texto: var(--texto); --color-texto-2: var(--texto-2);
+}
+body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }

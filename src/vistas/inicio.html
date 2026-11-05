@@ -1,0 +1,17 @@
+<section class="p-6" x-data="inicio">
+  <h1 class="text-2xl font-bold text-acento">Volver a escuchar</h1>
+  <p x-show="cargando" class="mt-4 text-texto-2">Cargando canciones…</p>
+  <div x-show="error" class="mt-4">
+    <p x-text="error"></p>
+    <button class="mt-2 rounded-lg bg-boton px-4 py-2 text-white" @click="cargar()">Reintentar</button>
+  </div>
+  <p x-show="!cargando && !error && canciones.length === 0" class="mt-4 text-texto-2">Todavía no hay canciones.</p>
+  <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <template x-for="c in canciones" :key="c.id">
+      <li class="rounded-xl border border-borde bg-superficie p-4">
+        <p class="font-semibold text-acento" x-text="c.titulo"></p>
+        <p class="text-sm text-texto-2" x-text="c.artista"></p>
+      </li>
+    </template>
+  </ul>
+</section>

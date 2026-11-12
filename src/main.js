@@ -10,10 +10,6 @@ window.Alpine = Alpine;
 Alpine.store('tema', {
   oscuro: localStorage.getItem('bst:tema') !== 'claro',
 
-  init() {
-    this.aplicar();
-  },
-
   alternar() {
     this.oscuro = !this.oscuro;
     this.aplicar();
@@ -25,16 +21,16 @@ Alpine.store('tema', {
   }
 });
 
-// Datos de la sesion
+// Sesion del usuario
 Alpine.store('sesion', {
   usuario: JSON.parse(localStorage.getItem('bst:sesion') || 'null'),
 
-  get estaAutenticado() {
+  get activa() {
     return this.usuario !== null;
   },
 
-  get activa() {
-    return this.estaAutenticado;
+  get estaAutenticado() {
+    return this.activa;
   },
 
   get esAdmin() {
@@ -66,14 +62,14 @@ Alpine.store('sesion', {
   async registrar(datos) {
     const res = await api.usuarios.listar();
 
-    if (!res.ok) return { ok: false, error: 'No se pudo revisar el registro.' };
+    if (!res.ok) return { ok: false, error: 'No se pudieron revisar los usuarios.' };
 
     const existe = res.data.some(u =>
       u.correo === datos.email || u.usuario === datos.usuario
     );
 
     if (existe) {
-      return { ok: false, error: 'El correo o usuario ya existe.' };
+      return { ok: false, error: 'El correo o usuario ya está registrado.' };
     }
 
     const nuevo = await api.usuarios.crear({
@@ -81,7 +77,8 @@ Alpine.store('sesion', {
       usuario: datos.usuario,
       correo: datos.email,
       clave: datos.password,
-      rol: 'usuario'
+      rol: 'usuario',
+      bio: ''
     });
 
     if (!nuevo.ok) return nuevo;
@@ -99,7 +96,7 @@ Alpine.store('sesion', {
   },
 
   esYo(id) {
-    return this.usuario?.id == id;
+    return this.usuario?.id === id;
   },
 
   cerrar() {
@@ -113,29 +110,51 @@ Alpine.store('sesion', {
   }
 });
 
-// Mensajes de aviso
+// Mensajes
+Alpine.store('toasts', {
+  mostrar(texto) {
+    alert(texto);
+  },
+  exito(texto) {
+    this.mostrar(texto);
+  },
+  error(texto) {
+    this.mostrar(texto);
+  },
+  info(texto) {
+    this.mostrar(texto);
+  }
+});
+
 Alpine.store('toast', {
   mensaje: '',
-
   mostrar(texto) {
     this.mensaje = texto;
     setTimeout(() => this.mensaje = '', 3000);
   }
 });
 
-// Estado de las rutas
 Alpine.store('router', {
   html: '',
   ruta: '',
-  param: null
+  param: null,
+  busqueda: '',
+  params: {},
+  query: {},
+  ir(ruta) {
+    location.hash = '#' + ruta;
+  },
+  reemplazar(ruta) {
+    location.hash = '#' + ruta;
+  }
 });
 
 Alpine.magic('api', () => api);
 
-// Cargar las funciones de cada vista
 Object.values(import.meta.glob('./vistas/*.js', { eager: true }))
   .forEach(m => m.default?.(Alpine));
 
 Alpine.start();
+Alpine.store('tema').aplicar();
 iniciarRouter(Alpine);
 // [IA] fin

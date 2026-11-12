@@ -1,58 +1,65 @@
 <!--[IA] inicio ia/2026-11-11_trashcodingudp_user-dinamics.md-->
 <section x-data="vistaRegistro" class="animate-aparecer mx-auto max-w-md py-8 lg:py-12">
-  <link rel="stylesheet" href="/src/css/login.css">
-  
-  
-  <div id="panel">
-  <h1 class="titulo-pagina">Crear cuenta</h1>  
-  <form class="tarjeta mt-6 space-y-4 p-6" novalidate @submit.prevent="enviar()" @input="revalidar($event)">
+
+  <h1 class="titulo-pagina">Crear cuenta</h1>
+
+  <form class="tarjeta mt-6 space-y-4 p-6"
+        novalidate
+        @submit.prevent="enviar()"
+        @input="revalidar($event)">
+
     <div>
-      <label for="reg-nombre" class="etiqueta">Nombre</label>
-      <input id="reg-nombre" name="nombre" class="entrada" autocomplete="name"
-             x-model.trim="form.nombre" @blur="validarCampo('nombre')"
-             :aria-invalid="!!errores.nombre" aria-describedby="reg-nombre-error" />
-      <p id="reg-nombre-error" class="error-campo" x-show="errores.nombre" x-cloak x-text="errores.nombre"></p>
+      <label class="etiqueta">Nombre</label>
+      <input name="nombre" class="entrada"
+             x-model.trim="form.nombre"
+             @input="validarCampo('nombre')">
+      <p class="error-campo" x-show="errores.nombre" x-text="errores.nombre"></p>
     </div>
 
     <div>
-      <label for="reg-usuario" class="etiqueta">Nombre de usuario</label>
-      <input id="reg-usuario" name="usuario" class="entrada" autocomplete="username"
-             x-model.trim="form.usuario" @blur="validarCampo('usuario')"
-             :aria-invalid="!!errores.usuario" aria-describedby="reg-usuario-error" />
-      <p id="reg-usuario-error" class="error-campo" x-show="errores.usuario" x-cloak x-text="errores.usuario"></p>
+      <label class="etiqueta">Nombre de usuario</label>
+      <input name="usuario" class="entrada"
+             x-model.trim="form.usuario"
+             @input="validarCampo('usuario')">
+      <p class="error-campo" x-show="errores.usuario" x-text="errores.usuario"></p>
     </div>
 
     <div>
-      <label for="reg-email" class="etiqueta">Correo electrónico</label>
-      <input id="reg-email" name="email" type="email" class="entrada" autocomplete="email"
-             x-model.trim="form.email" @blur="validarCampo('email')"
-             :aria-invalid="!!errores.email" aria-describedby="reg-email-error" />
-      <p id="reg-email-error" class="error-campo" x-show="errores.email" x-cloak x-text="errores.email"></p>
+      <label class="etiqueta">Correo electrónico</label>
+      <input name="email" type="email" class="entrada"
+             x-model.trim="form.email"
+             @input="validarCampo('email')">
+      <p class="error-campo" x-show="errores.email" x-text="errores.email"></p>
     </div>
 
     <div>
-      <label for="reg-password" class="etiqueta">Contraseña</label>
-      <input id="reg-password" name="password" type="password" class="entrada" autocomplete="new-password"
-             x-model="form.password" @blur="validarCampo('password')"
-             :aria-invalid="!!errores.password" aria-describedby="reg-password-error" />
-      <p id="reg-password-error" class="error-campo" x-show="errores.password" x-cloak x-text="errores.password"></p>
+      <label class="etiqueta">Contraseña</label>
+      <input name="password" type="password" class="entrada"
+             x-model="form.password"
+             @input="validarCampo('password')">
+      <p class="error-campo" x-show="errores.password" x-text="errores.password"></p>
     </div>
 
     <div>
-      <label for="reg-confirmar" class="etiqueta">Repite la contraseña</label>
-      <input id="reg-confirmar" name="confirmar" type="password" class="entrada" autocomplete="new-password"
-             x-model="form.confirmar" @blur="validarCampo('confirmar')"
-             :aria-invalid="!!errores.confirmar" aria-describedby="reg-confirmar-error" />
-      <p id="reg-confirmar-error" class="error-campo" x-show="errores.confirmar" x-cloak x-text="errores.confirmar"></p>
+      <label class="etiqueta">Repetir contraseña</label>
+      <input name="confirmar" type="password" class="entrada"
+             x-model="form.confirmar"
+             @input="validarCampo('confirmar')">
+      <p class="error-campo" x-show="errores.confirmar" x-text="errores.confirmar"></p>
     </div>
 
-    <p class="alerta-error" role="alert" x-show="errorGeneral" x-cloak x-text="errorGeneral"></p>
+    <p class="alerta-error" x-show="errorGeneral" x-text="errorGeneral"></p>
 
-    <button type="submit" class="btn btn-primario w-full" :disabled="enviando">
-      <span x-text="enviando ? 'Creando cuenta…' : 'Crear cuenta'">Crear cuenta</span>
+    <button type="submit" class="btn btn-primario w-full"
+            :disabled="enviando">
+      <span x-text="enviando ? 'Creando cuenta...' : 'Crear cuenta'"></span>
     </button>
-    <p class="text-center text-sm text-tenue">¿Ya tienes cuenta? <a href="login.html" class="text-acento">Inicia sesión</a></p>
+
+    <p class="text-center text-sm text-tenue">
+      ¿Ya tienes cuenta?
+      <a href="#/login" class="text-acento">Inicia sesión</a>
+    </p>
+
   </form>
-  </div>
 </section>
 <!--[IA] fin-->

@@ -1,32 +1,60 @@
 <!--[IA] inicio ia/2026-11-11_trashcodingudp_user-dinamics.md-->
 <section x-data="vistaLogin" class="animate-aparecer mx-auto max-w-md py-8 lg:py-12">
-  <head>
-    <link rel="stylesheet" href="/src/css/login.css">
-  </head>
-  <div id="panel">
+
   <h1 class="titulo-pagina">Iniciar sesión</h1>
-  <form class="tarjeta mt-6 space-y-4 p-6" novalidate @submit.prevent="enviar()" @input="revalidar($event)">
-    
+
+  <form class="tarjeta mt-6 space-y-4 p-6"
+        novalidate
+        @submit.prevent="enviar()"
+        @input="revalidar($event)">
+
     <div>
-      <label for="login-email" class="etiqueta">Correo electrónico</label>
-      <input id="login-email" name="email" type="email" class="entrada" autocomplete="email"
-             x-model.trim="form.email" @blur="validarCampo('email')"
-             :aria-invalid="!!errores.email" aria-describedby="login-email-error" />
-      <p id="login-email-error" class="error-campo" x-show="errores.email" x-cloak x-text="errores.email"></p>
+      <label class="etiqueta">Correo electrónico</label>
+
+      <input name="email"
+             type="email"
+             class="entrada"
+             placeholder="correo@ejemplo.com"
+             x-model.trim="form.email"
+             @input="validarCampo('email')">
+
+      <p class="error-campo"
+         x-show="errores.email"
+         x-text="errores.email"></p>
     </div>
+
     <div>
-      <label for="login-password" class="etiqueta">Contraseña</label>
-      <input id="login-password" name="password" type="password" class="entrada" autocomplete="current-password"
-             x-model="form.password" @blur="validarCampo('password')"
-             :aria-invalid="!!errores.password" aria-describedby="login-password-error" />
-      <p id="login-password-error" class="error-campo" x-show="errores.password" x-cloak x-text="errores.password"></p>
+      <label class="etiqueta">Contraseña</label>
+
+      <input name="password"
+             type="password"
+             class="entrada"
+             placeholder="Tu contraseña"
+             x-model="form.password"
+             @input="validarCampo('password')">
+
+      <p class="error-campo"
+         x-show="errores.password"
+         x-text="errores.password"></p>
     </div>
-    <p class="alerta-error" role="alert" x-show="errorGeneral" x-cloak x-text="errorGeneral"></p>
-    <button type="submit" class="btn btn-primario w-full" :disabled="enviando">
-      <span x-text="enviando ? 'Ingresando…' : 'Ingresar'">Iniciar</span>
+
+    <p class="alerta-error"
+       x-show="errorGeneral"
+       x-text="errorGeneral"></p>
+
+    <button type="submit"
+            class="btn btn-primario w-full"
+            :disabled="enviando">
+
+      <span x-text="enviando ? 'Ingresando...' : 'Ingresar'"></span>
+
     </button>
-    <p class="text-center text-sm text-tenue">¿No tienes cuenta? <a href="registro.html" class="text-acento">Regístrate</a></p>
+
+    <p class="text-center text-sm text-tenue">
+      ¿No tienes cuenta?
+      <a href="#/registro" class="text-acento">Regístrate</a>
+    </p>
+
   </form>
-  </div>
 </section>
 <!--[IA] fin-->

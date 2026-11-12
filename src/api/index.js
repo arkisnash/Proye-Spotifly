@@ -62,7 +62,7 @@ function recurso(nombre) {
     }),
   };
 }
-
+//[IA] inicio ia/2026-11-11_trashcodingudp_user-dinamics.md
 export const api = {
   config,
   canciones: recurso('canciones'),
@@ -70,20 +70,34 @@ export const api = {
   generos: recurso('generos'),
   usuarios: recurso('usuarios'),
   auth: {
-    iniciarSesion: ({ correo, clave }) => llamar(async () => {
-      const u = (await leer('usuarios')).find((x) => x.correo === correo && x.clave === clave);
-      if (!u) return fallo(401, 'Correo o contraseña incorrectos');
-      const { clave: _omitida, ...publico } = u;
-      return ok(publico);
-    }),
-    registrar: ({ nombre, correo, clave }) => llamar(async () => {
-      const d = await leer('usuarios');
-      if (d.some((x) => x.correo === correo)) return fallo(409, 'Ese correo ya está registrado');
-      const nuevo = { id: Math.max(0, ...d.map((x) => x.id)) + 1, nombre, correo, clave, rol: 'usuario' };
-      guardar('usuarios', [...d, nuevo]);
-      const { clave: _omitida, ...publico } = nuevo;
-      return ok(publico, 201);
-    }),
+  registrar: async (datos) => {
+    const res = await pedir('POST', '/auth/registro', datos);
+    if (res.ok) guardarSesion(res.data);            // { token, usuario }
+    return res;
   },
+  iniciarSesion: async (datos) => {
+    const res = await pedir('POST', '/auth/login', datos);
+    if (res.ok) guardarSesion(res.data);
+    return res;
+  },
+  cerrarSesion: async () => {
+    await pedir('POST', '/auth/logout').catch(() => {});
+    guardarSesion(null);                             // se borra aunque el servidor falle
+    return { ok: true, status: 204, data: null, error: null };
+  },
+  yo: () => pedir('GET', '/yo'),
+  actualizarPerfil: async (datos) => {
+    const res = await pedir('PUT', '/yo', datos);
+    if (res.ok) {
+      const sesion = leerSesion();
+      if (sesion) guardarSesion({ ...sesion, usuario: res.data }); // la sesión guardada se mantiene al día
+    }
+    return res;
+  },
+  cambiarPassword: (datos) => pedir('PUT', '/yo/password', datos),
+  usuarioGuardado: () => leerSesion()?.usuario ?? null,
+},
 };
 // [IA] fin
+//[IA] inicio ia/2026-11-11_trashcodingudp_user-dinamics.md
+// Capa de servicios: ÚNICO lugar que accede a los datos. Imita una API REST.

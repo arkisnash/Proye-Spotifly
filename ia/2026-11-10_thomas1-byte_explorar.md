@@ -243,3 +243,6 @@ controles (x-model) → variables (busqueda, genero, orden) → resultado (filtr
 ## Verificación
 - Skeletons visibles durante la carga simulada.
 - Búsqueda en tiempo real por título y genero.
+
+
+

@@ -1,4 +1,36 @@
-<section class="p-6">
-  <h1 class="text-2xl font-bold text-acento">Playlist</h1>
-  <p class="mt-2 text-texto-2">Vista pendiente (Persona 3).</p>
+<section class="p-6 max-w-3xl" x-data="{
+  playlist: null,
+  canciones: [],
+
+  async init() {
+    const [p, c] = await Promise.all([
+      $api.playlists.obtener($store.router.param),
+      $api.canciones.listar(),
+    ]);
+    if (p.ok && c.ok) {
+      this.playlist = p.data;
+      this.canciones = c.data.filter((x) => p.data.cancionIds.includes(x.id));
+    }
+  },
+
+  duracion(seg) { return Math.floor(seg / 60) + ':' + String(seg % 60).padStart(2, '0'); },
+}">
+
+<a href="#/biblioteca" class="text-sm text-texto-2 hover:underline">&larr; Volver a biblioteca</a>
+
+  <h1 class="mt-3 text-2xl font-bold text-acento" x-text="playlist?.nombre"></h1>
+  <p class="text-texto-2" x-text="playlist?.descripcion"></p>
+  <p class="mt-2 text-sm text-texto-2" x-text="canciones.length + ' canciones'"></p>
+<ul class="mt-4 space-y-2">
+    <template x-for="(c, i) in canciones" :key="c.id">
+      <li class="flex items-center gap-4 rounded-xl border border-borde bg-superficie p-4">
+        <span class="w-6 text-sm text-texto-2" x-text="i + 1"></span>
+        <div class="flex-1">
+          <p class="font-semibold text-acento" x-text="c.titulo"></p>
+          <p class="text-sm text-texto-2" x-text="c.artista"></p>
+        </div>
+        <span class="text-sm text-texto-2" x-text="duracion(c.duracion)"></span>
+      </li>
+    </template>
+  </ul>
 </section>

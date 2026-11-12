@@ -1,4 +1,94 @@
-<section class="p-6">
-  <h1 class="text-2xl font-bold text-acento">Administración</h1>
-  <p class="mt-2 text-texto-2">Vista pendiente (opcional).</p>
+<section class="space-y-6" x-data="{
+    canciones: [],
+    generos: [],
+    cargando: true,
+    error: null,
+    mensaje: null,
+    form: { titulo: '', artista: '', album: '', anio: 2024, generoId: 1, duracion: 180 },
+    async init() {
+      const [resC, resG] = await Promise.all([$api.canciones.listar(), $api.generos.listar()]);
+      if (resC.ok) this.canciones = resC.data;
+      else this.error = resC.error;
+      if (resG.ok) this.generos = resG.data;
+      this.cargando = false;
+    },
+    async agregar() {
+      this.error = null;
+      this.mensaje = null;
+      const res = await $api.canciones.crear(this.form);
+      if (!res.ok) {
+        this.error = res.error;
+        return;
+      }
+      this.mensaje = 'Canción agregada con éxito.';
+      this.form = { titulo: '', artista: '', album: '', anio: 2024, generoId: 1, duracion: 180 };
+      const resC = await $api.canciones.listar();
+      if (resC.ok) this.canciones = resC.data;
+    },
+    async eliminar(id) {
+      const res = await $api.canciones.eliminar(id);
+      if (!res.ok) {
+        this.error = res.error;
+        return;
+      }
+      this.mensaje = 'Canción eliminada.';
+      const resC = await $api.canciones.listar();
+      if (resC.ok) this.canciones = resC.data;
+    }
+}">
+  <h1 class="text-2xl font-bold">Panel de Administración</h1>
+
+  <div x-show="error" class="p-3 rounded bg-rose-500/20 text-rose-300 text-sm" x-text="error"></div>
+  <div x-show="mensaje" class="p-3 rounded bg-emerald-500/20 text-emerald-300 text-sm" x-text="mensaje"></div>
+
+  <form @submit.prevent="agregar()" class="p-4 rounded border border-slate-500/20 space-y-3 max-w-xl" style="background: var(--color-superficie)">
+    <h2 class="font-semibold text-base">Nueva Canción</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+      <div>
+        <label class="block text-xs opacity-70 mb-1">Título</label>
+        <input x-model="form.titulo" type="text" class="w-full px-3 py-1.5 rounded border border-slate-500/30 bg-transparent" required />
+      </div>
+      <div>
+        <label class="block text-xs opacity-70 mb-1">Artista</label>
+        <input x-model="form.artista" type="text" class="w-full px-3 py-1.5 rounded border border-slate-500/30 bg-transparent" required />
+      </div>
+      <div>
+        <label class="block text-xs opacity-70 mb-1">Álbum</label>
+        <input x-model="form.album" type="text" class="w-full px-3 py-1.5 rounded border border-slate-500/30 bg-transparent" />
+      </div>
+      <div>
+        <label class="block text-xs opacity-70 mb-1">Género</label>
+        <select x-model="form.generoId" class="w-full px-3 py-1.5 rounded border border-slate-500/30 bg-slate-800 text-white">
+          <template x-for="g in generos" :key="g.id">
+            <option :value="g.id" x-text="g.nombre"></option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs opacity-70 mb-1">Año</label>
+        <input x-model="form.anio" type="number" class="w-full px-3 py-1.5 rounded border border-slate-500/30 bg-transparent" />
+      </div>
+      <div>
+        <label class="block text-xs opacity-70 mb-1">Duración (seg)</label>
+        <input x-model="form.duracion" type="number" class="w-full px-3 py-1.5 rounded border border-slate-500/30 bg-transparent" />
+      </div>
+    </div>
+    <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white text-sm font-medium">Guardar canción</button>
+  </form>
+
+  <div class="space-y-2">
+    <h2 class="font-semibold text-base">Catálogo (<span x-text="canciones.length"></span>)</h2>
+    <p x-show="cargando" class="text-sm opacity-70">Cargando...</p>
+    <ul class="space-y-2">
+      <template x-for="c in canciones" :key="c.id">
+        <li class="p-3 rounded border border-slate-500/20 flex items-center justify-between text-sm" style="background: var(--color-superficie)">
+          <div>
+            <span class="font-medium" x-text="c.titulo"></span>
+            <span class="opacity-70" x-text="' — ' + c.artista"></span>
+          </div>
+          <button @click="eliminar(c.id)" class="px-2.5 py-1 rounded border border-rose-500/40 text-rose-400 text-xs">Eliminar</button>
+        </li>
+      </template>
+    </ul>
+  </div>
 </section>

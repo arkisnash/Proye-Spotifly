@@ -20,3 +20,152 @@
 body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
 :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
 /* [IA] fin */
+
+/* Estilos para formularios y mensajes */
+
+.registro-fondo {
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 35px 16px;
+  background: linear-gradient(135deg, #10091c, #24123b, #160d27);
+}
+
+.registro-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 35px;
+  border-radius: 20px;
+  background: #211333;
+  border: 1px solid #58347d;
+  box-shadow: 0 15px 45px #00000055;
+  color: #f5edff;
+}
+
+.registro-logo {
+  width: 55px;
+  height: 55px;
+  margin: 0 auto 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7541b8, #a77be8);
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+}
+
+.registro-card h1 {
+  text-align: center;
+  font-size: 27px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #e9d5ff;
+}
+
+.registro-subtitulo {
+  text-align: center;
+  color: #c4addd;
+  font-size: 14px;
+  margin-bottom: 27px;
+}
+
+.campo-registro {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 17px;
+}
+
+.campo-registro label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5d5f7;
+}
+
+.campo-registro input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  border-radius: 9px;
+  border: 1px solid #634584;
+  outline: none;
+  background: #160d24;
+  color: #ffffff;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.campo-registro input::placeholder {
+  color: #a18aaf;
+}
+
+.campo-registro input:focus {
+  border-color: #b78aff;
+  box-shadow: 0 0 0 3px #a77be833;
+}
+
+.campo-registro small {
+  color: #ff858e;
+  font-size: 12px;
+}
+
+.registro-boton {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7541b8, #9561d1);
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.registro-boton:hover {
+  background: linear-gradient(135deg, #8954ca, #b184e9);
+  transform: translateY(-2px);
+}
+
+.registro-boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.registro-error {
+  color: #ff858e;
+  font-size: 13px;
+  margin: 10px 0;
+}
+
+.registro-pie {
+  margin-top: 23px;
+  text-align: center;
+  font-size: 14px;
+  color: #c4addd;
+}
+
+.registro-pie a {
+  color: #bd91f5;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.registro-pie a:hover {
+  color: #dfc6ff;
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .registro-card {
+    padding: 25px 20px;
+  }
+
+  .registro-card h1 {
+    font-size: 24px;
+  }
+}

@@ -1,3 +1,4 @@
+﻿// [IA] inicio ia/2026-11-05_arkisnash_esqueleto-base.md
 import Alpine from 'alpinejs';
 import './css/app.css';
 import { api } from './api/index.js';
@@ -44,3 +45,4 @@ Object.values(import.meta.glob('./vistas/*.js', { eager: true })).forEach((m) =>
 
 Alpine.start();
 iniciarRouter(Alpine);
+// [IA] fin

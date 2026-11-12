@@ -1,3 +1,4 @@
+﻿// [IA] inicio ia/2026-11-05_arkisnash_esqueleto-base.md
 // Capa de servicios: ÚNICO lugar que accede a los datos. Imita una API REST.
 // Todas las funciones devuelven una Promesa con { ok, status, data, error }.
 const KEY = 'bst:';
@@ -85,3 +86,4 @@ export const api = {
     }),
   },
 };
+// [IA] fin

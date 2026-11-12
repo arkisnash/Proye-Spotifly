@@ -10,66 +10,41 @@
 </head>
 <body class="bg-gray-950 text-white">
 
-<section class="mx-auto max-w-3xl p-6"
-  x-data="{
-    canciones: [
-      { id: 1, titulo: 'Órbita lenta',    artista: 'Noa Vale',   genero: 'Ambient',    duracion: 214 },
-      { id: 2, titulo: 'Ciudad ámbar',    artista: 'Luz Marina', genero: 'Synth pop',  duracion: 187 },
-      { id: 3, titulo: 'Mareas de papel', artista: 'Elio Sur',   genero: 'Lo-fi',      duracion: 163 },
-      { id: 4, titulo: 'Neón y lluvia',   artista: 'Luz Marina', genero: 'Synth pop',  duracion: 245 },
-      { id: 5, titulo: 'Cuerdas al alba', artista: 'Elio Sur',   genero: 'Acústico',   duracion: 198 },
-      { id: 6, titulo: 'Bruma',           artista: 'Noa Vale',   genero: 'Ambient',    duracion: 301 },
-    ],
-    busqueda: '',
-    genero: '',
-    orden: 'titulo-asc',
+<section class="mx-auto max-w-3xl p-6" x-data="{
+  canciones: [], generos: [], busqueda: '', genero: '', cargando: true, error: '',
 
-    get generos() {
-      return [...new Set(this.canciones.map((c) => c.genero))].sort();
-    },
+  async init() {
+    const [c, g] = await Promise.all([this.$api.canciones.listar(), this.$api.generos.listar()]);
+    if (c.ok && g.ok) { this.canciones = c.data; this.generos = g.data; }
+    else { this.error = c.error || g.error; }
+    this.cargando = false;
+  },
 
-    get resultado() {
-      const q = this.busqueda.trim().toLowerCase();
-      const lista = this.canciones.filter((c) =>
-        (!q || c.titulo.toLowerCase().includes(q)) &&
-        (!this.genero || c.genero === this.genero));
+  nombreGenero(id) { return this.generos.find((g) => g.id === id)?.nombre; },
 
-      const [campo, dir] = this.orden.split('-');
-      return lista.sort((a, b) => {
-        const r = typeof a[campo] === 'number'
-          ? a[campo] - b[campo]
-          : a[campo].localeCompare(b[campo]);
-        return dir === 'desc' ? -r : r;
-      });
-    },
+  get resultado() {
+    const q = this.busqueda.trim().toLowerCase();
+    return this.canciones.filter((c) =>
+      (!q || (c.titulo + ' ' + c.artista).toLowerCase().includes(q)) &&
+      (!this.genero || c.generoId == this.genero));
+  },
 
-    formatoDuracion(seg) {
-      return Math.floor(seg / 60) + ':' + String(seg % 60).padStart(2, '0');
-    },
-  }">
+  duracion(seg) { return Math.floor(seg / 60) + ':' + String(seg % 60).padStart(2, '0'); },
+}">
 
-  <h1 class="text-2xl font-bold text-violet-400">Catálogo</h1>
+  <h1 class="text-2xl font-bold text-acento">Explorar</h1>
 
-  <!-- Controles: cada uno actúa por separado -->
-  <div class="mt-4 grid gap-3 sm:grid-cols-3">
-    <input type="search" x-model="busqueda" placeholder="Buscar por nombre"
-      class="rounded-lg border border-violet-700 bg-gray-900 px-4 py-2" />
-
-    <select x-model="genero" class="rounded-lg border border-violet-700 bg-gray-900 px-4 py-2">
+  <div class="mt-4 grid gap-3 sm:grid-cols-2">
+    <input type="search" x-model="busqueda" placeholder="Buscar por título o artista"
+      class="rounded-lg border border-campo bg-superficie px-4 py-2" />
+    <select x-model="genero" class="rounded-lg border border-campo bg-superficie px-4 py-2">
       <option value="">Todos los géneros</option>
-      <template x-for="g in generos" :key="g">
-        <option :value="g" x-text="g"></option>
+      <template x-for="g in generos" :key="g.id">
+        <option :value="g.id" x-text="g.nombre"></option>
       </template>
     </select>
-
-    <select x-model="orden" class="rounded-lg border border-violet-700 bg-gray-900 px-4 py-2">
-      <option value="titulo-asc">Título (A-Z)</option>
-      <option value="titulo-desc">Título (Z-A)</option>
-      <option value="artista-asc">Artista (A-Z)</option>
-      <option value="duracion-asc">Duración (menor a mayor)</option>
-      <option value="duracion-desc">Duración (mayor a menor)</option>
-    </select>
   </div>
+
 
   <p class="mt-4 text-sm text-gray-400" x-text="resultado.length + ' canciones'"></p>
 
@@ -77,18 +52,14 @@
   <p x-show="resultado.length === 0" class="mt-6 text-gray-400">No hay canciones con esos filtros.</p>
 
   <!-- Lista -->
-  <ul class="mt-4 space-y-2">
-    <template x-for="c in resultado" :key="c.id">
-      <li class="flex items-center justify-between rounded-xl border border-violet-900 bg-gray-900 p-4">
-        <div>
-          <p class="font-semibold" x-text="c.titulo"></p>
-          <p class="text-sm text-gray-400" x-text="c.artista + ' · ' + c.genero"></p>
-        </div>
-        <span class="text-sm text-gray-400" x-text="formatoDuracion(c.duracion)"></span>
-      </li>
-    </template>
-  </ul>
-</section>
+  <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+  <template x-for="c in resultado" :key="c.id">
+    <li class="rounded-xl border border-borde bg-superficie p-4">
+      <p class="font-semibold text-acento" x-text="c.titulo"></p>
+      <p class="text-sm text-texto-2" x-text="c.artista + ' · ' + nombreGenero(c.generoId)"></p>
+    </li>
+  </template>
+</ul>
 
 </body>
 </html>

@@ -1,7 +1,7 @@
 
 import { api } from '../api/index.js';
 import { formulario } from '../utils/formulario.js';
-import { reglas } from '../utils/validacion.js';
+import { reglas, validar } from '../utils/validacion.js';
 
 const ESQUEMA_PERFIL = {
   nombre: [reglas.requerido('Ingresa tu nombre.'), reglas.largo(2, 60, 'Entre 2 y 60 caracteres.')],

@@ -52,18 +52,14 @@
   <p x-show="resultado.length === 0" class="mt-6 text-gray-400">No hay canciones con esos filtros.</p>
 
   <!-- Lista -->
-  <ul class="mt-4 space-y-2">
-    <template x-for="c in resultado" :key="c.id">
-      <li class="flex items-center justify-between rounded-xl border border-violet-900 bg-gray-900 p-4">
-        <div>
-          <p class="font-semibold" x-text="c.titulo"></p>
-          <p class="text-sm text-gray-400" x-text="c.artista + ' · ' + c.genero"></p>
-        </div>
-        <span class="text-sm text-gray-400" x-text="formatoDuracion(c.duracion)"></span>
-      </li>
-    </template>
-  </ul>
-</section>
+  <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+  <template x-for="c in resultado" :key="c.id">
+    <li class="rounded-xl border border-borde bg-superficie p-4">
+      <p class="font-semibold text-acento" x-text="c.titulo"></p>
+      <p class="text-sm text-texto-2" x-text="c.artista + ' · ' + nombreGenero(c.generoId)"></p>
+    </li>
+  </template>
+</ul>
 
 </body>
 </html>

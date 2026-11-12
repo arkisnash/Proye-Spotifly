@@ -10,7 +10,7 @@
   <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
     <template x-for="c in canciones" :key="c.id">
       <li class="rounded-xl border border-borde bg-superficie p-4">
-        <p class="font-semibold text-acento" x-text="c.titulo"></p>
+        <a :href="'#/cancion/' + c.id" class="font-semibold text-acento hover:underline" x-text="c.titulo"></a>
         <p class="text-sm text-texto-2" x-text="c.artista"></p>
       </li>
     </template>

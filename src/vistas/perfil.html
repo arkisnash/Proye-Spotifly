@@ -1,29 +1,22 @@
 <!--[IA] inicio ia/2026-11-11_trashcodingudp_user-dinamics.md-->
 <section x-data="vistaPerfil" class="animate-aparecer py-8 lg:py-12">
-  <div class="mt-0">
-    <!-- @incluir src/componentes/estado-error.html -->
+  <h1 class="titulo-pagina mb-6">Mi perfil</h1>
+  <div class="tarjeta flex flex-wrap items-center gap-5 p-6">
+    <div class="avatar size-20 text-xl"
+         x-text="(usuario?.nombre || 'U').charAt(0).toUpperCase()">
+    </div>
+    <div class="flex-1">
+      <h2 class="text-xl font-bold" x-text="usuario?.nombre"></h2>
+      <p class="text-tenue">
+        @<span x-text="usuario?.usuario"></span>
+      </p>
+      <p class="text-tenue" x-text="usuario?.correo"></p>
+      <p class="mt-2" x-text="usuario?.bio || 'Todavía no tienes una biografía.'"></p>
+    </div>
+    <a href="#/configuracion" class="btn btn-secundario">
+      Editar perfil
+    </a>
   </div>
 
-  <header x-show="persona && !cargando" x-cloak class="tarjeta flex flex-wrap items-center gap-5 p-6">
-    <span class="avatar size-20 text-xl" :class="$fmt.colorAvatar(persona?.id)"
-          x-text="$fmt.iniciales(persona?.nombre ?? '')" aria-hidden="true"></span>
-
-    <div class="min-w-0 flex-1">
-      <h1 class="titulo-pagina" x-text="persona?.nombre"></h1>
-      <p class="text-tenue">@<span x-text="persona?.usuario"></span> · se unió en <span x-text="$fmt.mesYAnio(persona?.creadoEn)"></span></p>
-      <p class="mt-2" x-show="persona?.bio" x-text="persona?.bio"></p>
-      <p class="mt-3 text-sm text-tenue">
-        <span x-text="persona?.totalRecetas"></span> recetas ·
-        <span x-text="persona?.totalSeguidores"></span> seguidores ·
-        <span x-text="persona?.totalSiguiendo"></span> siguiendo
-      </p>
-    </div>
-
-    <!-- Mi perfil: editar. Perfil ajeno: seguir -->
-    <a x-show="esMio" href="configuracion.html" class="btn btn-secundario">Editar perfil</a>
-    <template x-if="persona && !esMio && $store.sesion.activa">
-      <div x-data="botonSeguir(persona)"><!-- @incluir src/componentes/boton-seguir.html --></div>
-    </template>
-  </header>
 </section>
 <!--[IA] fin-->

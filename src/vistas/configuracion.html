@@ -1,63 +1,55 @@
 <!--[IA] inicio ia/2026-11-11_trashcodingudp_user-dinamics.md-->
-<section x-data="vistaConfiguracion" class="animate-aparecer mx-auto max-w-2xl space-y-8 py-8 lg:py-12">
+<section x-data="vistaConfiguracion"
+         class="animate-aparecer mx-auto max-w-2xl space-y-6 py-8">
   <h1 class="titulo-pagina">Configuración</h1>
-
-  <!-- Datos de la cuenta -->
-  <form class="tarjeta space-y-4 p-6" novalidate @submit.prevent="guardar()" @input="revalidar($event)">
-    <h2 class="font-display text-xl font-medium">Perfil</h2>
-
+  <div class="tarjeta space-y-4 p-6">
+    <h2 class="text-xl font-bold">Mis datos</h2>
     <div>
-      <label class="etiqueta">Correo</label>
-      <input class="entrada" disabled :value="$store.sesion.usuario.email" />
-      <p class="ayuda">El correo no se puede cambiar.</p>
+      <label class="etiqueta">Correo electrónico</label>
+      <input class="entrada"
+             disabled
+             :value="$store.sesion.usuario?.correo">
     </div>
-
     <div>
-      <label for="cfg-nombre" class="etiqueta">Nombre</label>
-      <input id="cfg-nombre" name="nombre" class="entrada" x-model.trim="form.nombre"
-             @blur="validarCampo('nombre')" :aria-invalid="!!errores.nombre" aria-describedby="cfg-nombre-error" />
-      <p id="cfg-nombre-error" class="error-campo" x-show="errores.nombre" x-cloak x-text="errores.nombre"></p>
+      <label class="etiqueta">Nombre</label>
+      <input class="entrada"
+             x-model="nombre"
+             maxlength="60">
     </div>
-
     <div>
-      <label for="cfg-bio" class="etiqueta">Biografía</label>
-      <textarea id="cfg-bio" name="bio" rows="3" maxlength="160" class="entrada" x-model="form.bio"
-                @blur="validarCampo('bio')" :aria-invalid="!!errores.bio" aria-describedby="cfg-bio-error"></textarea>
-      <p class="ayuda"><span x-text="form.bio.length"></span>/160</p>
-      <p id="cfg-bio-error" class="error-campo" x-show="errores.bio" x-cloak x-text="errores.bio"></p>
+      <label class="etiqueta">Biografía</label>
+      <textarea class="entrada"
+                rows="3"
+                maxlength="160"
+                x-model="bio"></textarea>
+      <p class="text-sm text-tenue">
+        <span x-text="bio.length"></span>/160 caracteres
+      </p>
     </div>
-
-    <p class="alerta-error" role="alert" x-show="errorGeneral" x-cloak x-text="errorGeneral"></p>
-    <button type="submit" class="btn btn-primario" :disabled="enviando || !hayCambios">
-      <span x-text="enviando ? 'Guardando…' : 'Guardar cambios'"></span>
+    <p class="error-campo" x-text="mensaje"></p>
+    <button class="btn btn-primario"
+            @click="guardar()"
+            :disabled="enviando">
+      <span x-text="enviando ? 'Guardando...' : 'Guardar cambios'"></span>
     </button>
-  </form>
-
-  <!-- Contraseña -->
-  <form class="tarjeta space-y-4 p-6" novalidate @submit.prevent="cambiarPassword()">
-    <h2 class="font-display text-xl font-medium">Cambiar contraseña</h2>
-
-    <div>
-      <label for="pw-actual" class="etiqueta">Contraseña actual</label>
-      <input id="pw-actual" type="password" class="entrada" autocomplete="current-password"
-             x-model="pw.actual" :aria-invalid="!!pwErrores.actual" aria-describedby="pw-actual-error" />
-      <p id="pw-actual-error" class="error-campo" x-show="pwErrores.actual" x-cloak x-text="pwErrores.actual"></p>
-    </div>
-    <div>
-      <label for="pw-nueva" class="etiqueta">Nueva contraseña</label>
-      <input id="pw-nueva" type="password" class="entrada" autocomplete="new-password"
-             x-model="pw.nueva" :aria-invalid="!!pwErrores.nueva" aria-describedby="pw-nueva-error" />
-      <p id="pw-nueva-error" class="error-campo" x-show="pwErrores.nueva" x-cloak x-text="pwErrores.nueva"></p>
-    </div>
-    <div>
-      <label for="pw-repetir" class="etiqueta">Repite la nueva contraseña</label>
-      <input id="pw-repetir" type="password" class="entrada" autocomplete="new-password"
-             x-model="pw.repetir" :aria-invalid="!!pwErrores.repetir" aria-describedby="pw-repetir-error" />
-      <p id="pw-repetir-error" class="error-campo" x-show="pwErrores.repetir" x-cloak x-text="pwErrores.repetir"></p>
-    </div>
-    <button type="submit" class="btn btn-secundario" :disabled="pwEnviando">Actualizar contraseña</button>
-  </form>
-
-  <button type="button" class="btn btn-peligro" @click="$store.sesion.cerrar()">Cerrar sesión</button>
+  </div>
+  <div class="tarjeta space-y-4 p-6">
+    <h2 class="text-xl font-bold">Apariencia</h2>
+    <p class="text-tenue">
+      Cambia el aspecto de Spotifly.
+    </p>
+    <button class="btn btn-secundario"
+            @click="$store.tema.alternar()">
+      Cambiar a modo
+      <span x-text="$store.tema.oscuro ? 'claro' : 'oscuro'"></span>
+    </button>
+  </div>
+  <div class="tarjeta p-6">
+    <h2 class="text-xl font-bold mb-3">Sesión</h2>
+    <button class="btn btn-peligro"
+            @click="$store.sesion.cerrar()">
+      Cerrar sesión
+    </button>
+  </div>
 </section>
 <!--[IA] fin-->

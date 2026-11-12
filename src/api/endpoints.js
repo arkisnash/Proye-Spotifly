@@ -1,5 +1,5 @@
 
-
+//[IA] inicio ia/2026-11-11_trashcodingudp_user-dinamics.md
 // En la tabla endpoints (junto a /yo):
 export const endpoints = [
   // …las filas que ya tienes…
@@ -76,3 +76,4 @@ function cambiarPassword({ cuerpo, yo }) {
   escribir('usuarios', usuarios.map((u) => (u.id === yo.id ? { ...u, password: cuerpo.nueva } : u)));
   return sinContenido();
 }
+//[IA] fin

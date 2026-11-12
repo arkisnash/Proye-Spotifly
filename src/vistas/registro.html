@@ -1,7 +1,10 @@
 <!--[IA] inicio ia/2026-11-11_trashcodingudp_user-dinamics.md-->
 <section x-data="vistaRegistro" class="animate-aparecer mx-auto max-w-md py-8 lg:py-12">
-  <h1 class="titulo-pagina">Crear cuenta</h1>
-
+  <link rel="stylesheet" href="/src/css/login.css">
+  
+  
+  <div id="panel">
+  <h1 class="titulo-pagina">Crear cuenta</h1>  
   <form class="tarjeta mt-6 space-y-4 p-6" novalidate @submit.prevent="enviar()" @input="revalidar($event)">
     <div>
       <label for="reg-nombre" class="etiqueta">Nombre</label>
@@ -46,9 +49,10 @@
     <p class="alerta-error" role="alert" x-show="errorGeneral" x-cloak x-text="errorGeneral"></p>
 
     <button type="submit" class="btn btn-primario w-full" :disabled="enviando">
-      <span x-text="enviando ? 'Creando cuenta…' : 'Crear cuenta'"></span>
+      <span x-text="enviando ? 'Creando cuenta…' : 'Crear cuenta'">Crear cuenta</span>
     </button>
     <p class="text-center text-sm text-tenue">¿Ya tienes cuenta? <a href="login.html" class="text-acento">Inicia sesión</a></p>
   </form>
+  </div>
 </section>
 <!--[IA] fin-->

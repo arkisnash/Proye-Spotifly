@@ -1,7 +1,12 @@
 <!--[IA] inicio ia/2026-11-11_trashcodingudp_user-dinamics.md-->
 <section x-data="vistaLogin" class="animate-aparecer mx-auto max-w-md py-8 lg:py-12">
+  <head>
+    <link rel="stylesheet" href="/src/css/login.css">
+  </head>
+  <div id="panel">
   <h1 class="titulo-pagina">Iniciar sesión</h1>
   <form class="tarjeta mt-6 space-y-4 p-6" novalidate @submit.prevent="enviar()" @input="revalidar($event)">
+    
     <div>
       <label for="login-email" class="etiqueta">Correo electrónico</label>
       <input id="login-email" name="email" type="email" class="entrada" autocomplete="email"
@@ -18,9 +23,10 @@
     </div>
     <p class="alerta-error" role="alert" x-show="errorGeneral" x-cloak x-text="errorGeneral"></p>
     <button type="submit" class="btn btn-primario w-full" :disabled="enviando">
-      <span x-text="enviando ? 'Ingresando…' : 'Ingresar'"></span>
+      <span x-text="enviando ? 'Ingresando…' : 'Ingresar'">Iniciar</span>
     </button>
     <p class="text-center text-sm text-tenue">¿No tienes cuenta? <a href="registro.html" class="text-acento">Regístrate</a></p>
   </form>
+  </div>
 </section>
 <!--[IA] fin-->

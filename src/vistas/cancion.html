@@ -1,4 +1,25 @@
-<section class="p-6">
+<section class="p-6" x-data="{
+  cancion: null,
+  cargando: true,
+  error: '',
+  async init() {
+    const id = window.location.hash.split('/')[2];
+    const res = await this.$api.canciones.obtener(id);
+    if (res.ok) this.cancion = res.data;
+    else this.error = res.error || 'No se encontró la canción.';
+    this.cargando = false;
+  }
+}">
   <h1 class="text-2xl font-bold text-acento">Detalle de canción</h1>
-  <p class="mt-2 text-texto-2">Vista pendiente (Persona 3).</p>
+  
+  <p x-show="cargando" class="mt-4 text-texto-2">Cargando canción...</p>
+  <p x-show="error" class="mt-4 text-red-400" x-text="error"></p>
+
+  <div x-show="!cargando && cancion" class="mt-4 rounded-xl border border-borde bg-superficie p-6">
+    <h2 class="text-xl font-bold text-texto" x-text="cancion?.titulo"></h2>
+    <p class="mt-1 text-texto-2" x-text="'Artista: ' + cancion?.artista"></p>
+    <p class="mt-1 text-sm text-texto-2" x-text="'Álbum: ' + (cancion?.album || 'N/A')"></p>
+    <p class="mt-1 text-sm text-texto-2" x-text="'Año: ' + (cancion?.anio || 'N/A')"></p>
+    <a href="#/" class="mt-4 inline-block text-sm text-acento hover:underline">&larr; Volver al inicio</a>
+  </div>
 </section>

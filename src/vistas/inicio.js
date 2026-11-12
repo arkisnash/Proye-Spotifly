@@ -1,3 +1,4 @@
+﻿// [IA] inicio ia/2026-11-05_arkisnash_esqueleto-base.md
 // Patrón para todas las vistas: Alpine.data('nombre', ...) y llamar siempre a la capa api.
 import { api } from '../api/index.js';
 
@@ -13,3 +14,4 @@ export default (Alpine) => {
     init() { this.cargar(); },
   }));
 };
+// [IA] fin

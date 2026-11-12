@@ -1,1 +1,10 @@
-[{"id":1,"nombre":"Ambient"},{"id":2,"nombre":"Electrónica"},{"id":3,"nombre":"Synth pop"},{"id":4,"nombre":"Lo-fi"},{"id":5,"nombre":"Acústico"},{"id":6,"nombre":"Instrumental"}]
+[{"id":1,"nombre":"Ambient"},
+ {"id":2,"nombre":"Electrónica"},
+ {"id":3,"nombre":"Synth pop"},
+ {"id":4,"nombre":"Lo-fi"},
+ {"id":5,"nombre":"Acústico"},
+ {"id":6,"nombre":"Instrumental"},
+ {"id": 7, "nombre": "Rock"},
+ {"id": 8, "nombre": "Urbano"},
+ {"id": 9, "nombre": "Trap"},
+ {"id": 10, "nombre": "Kpop"}]

@@ -1,3 +1,4 @@
+﻿// [IA] inicio ia/2026-11-05_arkisnash_esqueleto-base.md
 // Cada ruta #/nombre carga src/vistas/nombre.html. #/cancion/3 usa la vista "cancion" con param = '3'.
 const vistas = import.meta.glob('./vistas/*.html', { query: '?raw', import: 'default', eager: true });
 const publicas = ['login', 'registro', '404'];
@@ -21,3 +22,4 @@ export function iniciarRouter(Alpine) {
   addEventListener('hashchange', ir);
   ir();
 }
+// [IA] fin

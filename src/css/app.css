@@ -1,3 +1,4 @@
+﻿/* [IA] inicio ia/2026-11-05_arkisnash_esqueleto-base.md */
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -18,3 +19,4 @@
 }
 body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
 :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+/* [IA] fin */

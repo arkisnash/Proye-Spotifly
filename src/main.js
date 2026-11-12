@@ -6,42 +6,135 @@ import { iniciarRouter } from './router.js';
 
 window.Alpine = Alpine;
 
-// Tema claro/oscuro (se recuerda en localStorage; por defecto, oscuro)
+// Tema de la pagina
 Alpine.store('tema', {
   oscuro: localStorage.getItem('bst:tema') !== 'claro',
-  init() { this.aplicar(); },
-  alternar() { this.oscuro = !this.oscuro; this.aplicar(); },
+
+  init() {
+    this.aplicar();
+  },
+
+  alternar() {
+    this.oscuro = !this.oscuro;
+    this.aplicar();
+  },
+
   aplicar() {
     document.documentElement.classList.toggle('dark', this.oscuro);
     localStorage.setItem('bst:tema', this.oscuro ? 'oscuro' : 'claro');
-  },
+  }
 });
 
-// Sesión simulada
+// Datos de la sesion
 Alpine.store('sesion', {
   usuario: JSON.parse(localStorage.getItem('bst:sesion') || 'null'),
-  entrar(u) { this.usuario = u; localStorage.setItem('bst:sesion', JSON.stringify(u)); },
-  salir() { this.usuario = null; localStorage.removeItem('bst:sesion'); location.hash = '#/login'; },
-});
 
-// Notificaciones: Alpine.store('toast').mostrar('Playlist creada')
-Alpine.store('toast', {
-  items: [],
-  mostrar(texto) {
-    const t = { id: Date.now() + Math.random(), texto };
-    this.items.push(t);
-    setTimeout(() => { this.items = this.items.filter((i) => i.id !== t.id); }, 3500);
+  get estaAutenticado() {
+    return this.usuario !== null;
   },
+
+  get activa() {
+    return this.estaAutenticado;
+  },
+
+  get esAdmin() {
+    return this.usuario?.rol === 'admin';
+  },
+
+  entrar(usuario) {
+    this.usuario = usuario;
+    localStorage.setItem('bst:sesion', JSON.stringify(usuario));
+  },
+
+  async iniciar(datos) {
+    const res = await api.usuarios.listar();
+
+    if (!res.ok) return { ok: false, error: 'No se pudieron cargar los usuarios.' };
+
+    const usuario = res.data.find(u =>
+      u.correo === datos.email && u.clave === datos.password
+    );
+
+    if (!usuario) {
+      return { ok: false, error: 'Correo o contraseña incorrectos.' };
+    }
+
+    this.entrar(usuario);
+    return { ok: true, data: { usuario } };
+  },
+
+  async registrar(datos) {
+    const res = await api.usuarios.listar();
+
+    if (!res.ok) return { ok: false, error: 'No se pudo revisar el registro.' };
+
+    const existe = res.data.some(u =>
+      u.correo === datos.email || u.usuario === datos.usuario
+    );
+
+    if (existe) {
+      return { ok: false, error: 'El correo o usuario ya existe.' };
+    }
+
+    const nuevo = await api.usuarios.crear({
+      nombre: datos.nombre,
+      usuario: datos.usuario,
+      correo: datos.email,
+      clave: datos.password,
+      rol: 'usuario'
+    });
+
+    if (!nuevo.ok) return nuevo;
+
+    this.entrar(nuevo.data);
+    return { ok: true, data: { usuario: nuevo.data } };
+  },
+
+  async actualizarPerfil(datos) {
+    const res = await api.usuarios.actualizar(this.usuario.id, datos);
+
+    if (res.ok) this.entrar(res.data);
+
+    return res;
+  },
+
+  esYo(id) {
+    return this.usuario?.id == id;
+  },
+
+  cerrar() {
+    this.usuario = null;
+    localStorage.removeItem('bst:sesion');
+    location.hash = '#/login';
+  },
+
+  salir() {
+    this.cerrar();
+  }
 });
 
-// Estado del router: vista actual, parámetro de la URL (#/cancion/3 -> '3') y texto del buscador
-Alpine.store('router', { html: '', ruta: '', param: null, busqueda: '' });
+// Mensajes de aviso
+Alpine.store('toast', {
+  mensaje: '',
 
-// En las plantillas se usa $api (ej.: $api.canciones.listar())
+  mostrar(texto) {
+    this.mensaje = texto;
+    setTimeout(() => this.mensaje = '', 3000);
+  }
+});
+
+// Estado de las rutas
+Alpine.store('router', {
+  html: '',
+  ruta: '',
+  param: null
+});
+
 Alpine.magic('api', () => api);
 
-// Cada src/vistas/*.js puede registrar su lógica con Alpine.data (ver inicio.js)
-Object.values(import.meta.glob('./vistas/*.js', { eager: true })).forEach((m) => m.default?.(Alpine));
+// Cargar las funciones de cada vista
+Object.values(import.meta.glob('./vistas/*.js', { eager: true }))
+  .forEach(m => m.default?.(Alpine));
 
 Alpine.start();
 iniciarRouter(Alpine);

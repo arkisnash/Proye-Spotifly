@@ -10,8 +10,38 @@
   <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
     <template x-for="c in canciones" :key="c.id">
       <li class="rounded-xl border border-borde bg-superficie p-4">
-        <a :href="'#/cancion/' + c.id" class="font-semibold text-acento hover:underline" x-text="c.titulo"></a>
-        <p class="text-sm text-texto-2" x-text="c.artista"></p>
+        <button type="button" @click="$store.reproductor.reproducir(c)"
+          class="relative size-12 shrink-0 overflow-hidden rounded-lg border border-borde bg-fondo flex items-center justify-center text-white hover:bg-boton transition cursor-pointer"
+          :class="$store.reproductor.actual?.id === c.id && 'border-acento bg-boton/20'"
+          :title="'Reproducir ' + c.titulo">
+          <span class="text-base" x-text="$store.reproductor.actual?.id === c.id && $store.reproductor.sonando ? '⏸' : '▶'"></span>
+        </button>
+        <div class="min-w-0 flex-1">
+          <a :href="'#/cancion/' + c.id" class="block font-semibold text-texto hover:text-acento truncate" x-text="c.titulo"></a>
+          <p class="text-xs text-texto-2 truncate" x-text="c.artista + ' · ' + formatoDuracion(c.duracion)"></p>
+        </div>
+<div class="relative">
+          <button type="button" @click.stop="menuAbierto = (menuAbierto === c.id ? null : c.id)"
+            class="size-8 rounded-full hover:bg-fondo flex items-center justify-center text-texto-2 hover:text-texto cursor-pointer text-lg font-bold"
+            aria-label="Más opciones">⋮</button>
+
+          <div x-show="menuAbierto === c.id" @click.stop
+            class="absolute right-0 top-9 z-30 w-56 rounded-xl border border-borde bg-lateral p-1.5 shadow-2xl text-sm">
+            <a :href="'#/cancion/' + c.id" class="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-superficie text-texto">
+              <span>ℹ</span> Ver detalles de canción
+            </a>
+            <div class="my-1 border-t border-borde"></div>
+            <p class="px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-texto-2">Agregar a playlist</p>
+            <template x-for="p in playlists" :key="p.id">
+              <button type="button" @click="agregarAPlaylist(p, c.id)"
+                class="w-full text-left rounded-lg px-3 py-1.5 hover:bg-superficie text-texto truncate cursor-pointer"
+                x-text="'+ ' + p.nombre"></button>
+            </template>
+            <a x-show="playlists.length === 0" href="#/biblioteca" class="block px-3 py-1.5 text-xs text-acento hover:underline">
+              Crear playlist en Biblioteca &rarr;
+            </a>
+          </div>
+        </div>
       </li>
     </template>
   </ul>

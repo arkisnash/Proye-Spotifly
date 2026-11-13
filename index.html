@@ -33,7 +33,7 @@
       <button class="rounded-lg border border-campo p-2 md:hidden" aria-label="Abrir menú" :aria-expanded="menu" @click="menu = !menu">☰</button>
       <label class="sr-only" for="buscar">Buscar canciones, artistas o géneros</label>
       <input id="buscar" type="search" placeholder="Buscar canciones, artistas o géneros" x-model="$store.router.busqueda"
-        @keydown.enter="location.hash = '#/explorar'"
+        @input="if ($store.router.ruta !== 'explorar') location.hash = '#/explorar'"
         class="w-full max-w-xl rounded-lg border border-campo bg-superficie px-4 py-2 placeholder:text-texto-2" />
       <button class="ml-auto rounded-full border border-campo p-2" @click="$store.tema.alternar()"
         :aria-label="$store.tema.oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'" x-text="$store.tema.oscuro ? '☀' : '☾'"></button>

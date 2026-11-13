@@ -15,11 +15,26 @@
   <p x-show="cargando" class="mt-4 text-texto-2">Cargando canción...</p>
   <p x-show="error" class="mt-4 text-red-400" x-text="error"></p>
 
-  <div x-show="!cargando && cancion" class="mt-4 rounded-xl border border-borde bg-superficie p-6">
-    <h2 class="text-xl font-bold text-texto" x-text="cancion?.titulo"></h2>
-    <p class="mt-1 text-texto-2" x-text="'Artista: ' + cancion?.artista"></p>
-    <p class="mt-1 text-sm text-texto-2" x-text="'Álbum: ' + (cancion?.album || 'N/A')"></p>
-    <p class="mt-1 text-sm text-texto-2" x-text="'Año: ' + (cancion?.anio || 'N/A')"></p>
-    <a href="#/" class="mt-4 inline-block text-sm text-acento hover:underline">&larr; Volver al inicio</a>
+  <div x-show="!cargando && cancion" class="mt-6 rounded-2xl border border-borde bg-superficie p-6 shadow-sm space-y-4">
+    <div>
+      <h2 class="text-2xl font-extrabold text-texto" x-text="cancion?.titulo"></h2>
+      <p class="mt-1 text-base font-medium text-acento" x-text="cancion?.artista"></p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2 text-sm text-texto-2 border-t border-borde pt-4">
+      <p>Álbum: <strong class="text-texto" x-text="cancion?.album || 'N/A'"></strong></p>
+      <p>Año: <strong class="text-texto" x-text="cancion?.anio || 'N/A'"></strong></p>
+    </div>
+
+    <div class="pt-4 border-t border-borde">
+      <button type="button" @click="$store.reproductor.reproducir(cancion)"
+        class="rounded-lg bg-boton px-4 py-2 text-sm font-medium text-white">
+        Reproducir canción
+      </button>
+    </div>
+
+    <div class="pt-4">
+      <a href="#/" class="inline-flex items-center text-sm font-medium text-acento hover:underline">&larr; Volver al inicio</a>
+    </div>
   </div>
 </section>

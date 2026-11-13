@@ -7,7 +7,7 @@
     this.error = '';
     const res = await this.$api.auth.iniciarSesion({ correo: this.correo, clave: this.clave });
     if (res.ok) {
-      this.$store.sesion.usuario = res.data; // <-- AGREGA ESTA LÍNEA
+      this.$store.sesion.entrar(res.data); // <-- Usa la función del store que guarda en 'bst:sesion'
       window.location.hash = '#/';
     } else {
       this.error = res.error || 'Error al iniciar sesión';

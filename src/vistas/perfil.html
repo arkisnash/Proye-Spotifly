@@ -7,8 +7,7 @@
   },
 
   cerrarSesion() {
-    this.$store.sesion.usuario = null;
-    window.location.hash = '#/login';
+    this.$store.sesion.salir(); // <-- Limpia y redirige al login con la misma clave
   }
 }">
   <h1 class="text-2xl font-bold text-acento">Mi Perfil</h1>

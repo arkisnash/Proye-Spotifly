@@ -1,4 +1,56 @@
-<section class="p-6">
+<section class="p-6 max-w-md mx-auto" x-data="{
+  nombre: '',
+  correo: '',
+  clave: '',
+  error: '',
+
+  async registrar() {
+    this.error = '';
+    const res = await this.$api.auth.registrar({ 
+      nombre: this.nombre, 
+      correo: this.correo, 
+      clave: this.clave 
+    });
+    
+    if (res.ok) {
+      // Guardamos la sesión automáticamente y mandamos al inicio
+      this.$store.sesion.usuario = res.data;
+      window.location.hash = '#/';
+    } else {
+      this.error = res.error || 'Error al registrar la cuenta';
+    }
+  }
+}">
   <h1 class="text-2xl font-bold text-acento">Crear cuenta</h1>
-  <p class="mt-2 text-texto-2">Vista pendiente (Persona 2).</p>
+  <p class="text-sm text-texto-2 mt-1">Únete a Beat Sound Track</p>
+
+  <p x-show="error" class="mt-4 text-sm text-red-400" x-text="error"></p>
+
+  <form @submit.prevent="registrar()" class="mt-4 space-y-4">
+    <div>
+      <label class="block text-sm text-texto">Nombre completo</label>
+      <input type="text" x-model="nombre" required placeholder="Tu nombre"
+        class="mt-1 w-full rounded-lg border border-borde bg-superficie px-3 py-2 text-texto" />
+    </div>
+
+    <div>
+      <label class="block text-sm text-texto">Correo electrónico</label>
+      <input type="email" x-model="correo" required placeholder="correo@ejemplo.com"
+        class="mt-1 w-full rounded-lg border border-borde bg-superficie px-3 py-2 text-texto" />
+    </div>
+
+    <div>
+      <label class="block text-sm text-texto">Contraseña</label>
+      <input type="password" x-model="clave" required placeholder="••••••••"
+        class="mt-1 w-full rounded-lg border border-borde bg-superficie px-3 py-2 text-texto" />
+    </div>
+
+    <button type="submit" class="w-full rounded-lg bg-boton px-4 py-2 font-medium text-white">
+      Registrarse
+    </button>
+  </form>
+
+  <p class="mt-4 text-sm text-texto-2">
+    ¿Ya tienes cuenta? <a href="#/login" class="text-acento hover:underline">Inicia sesión</a>
+  </p>
 </section>

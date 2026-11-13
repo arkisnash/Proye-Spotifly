@@ -1,14 +1,15 @@
 <!-- [IA] inicio ia/2026-11-12_arkisnash_panel-admin.md -->
 <section class="p-6 max-w-5xl mx-auto" x-data="{
   canciones: [],
+  generos: [],
   cargando: true,
   error: '',
   titulo: '',
   artista: '',
   album: '',
   anio: 2026,
-  duracion: 180,
-  generoId: 1,
+  duracionInput: '3.00',
+  generoId: '',
 
   async init() {
     await this.cargar();
@@ -17,28 +18,43 @@
   async cargar() {
     this.cargando = true;
     this.error = '';
-    const res = await this.$api.canciones.listar();
-    if (res.ok) {
-      this.canciones = res.data;
+    const [resC, resG] = await Promise.all([
+      this.$api.canciones.listar(),
+      this.$api.generos.listar()
+    ]);
+    if (resC.ok && resG.ok) {
+      this.canciones = resC.data;
+      this.generos = resG.data;
+      if (this.generos.length > 0 && !this.generoId) {
+        this.generoId = this.generos[0].id;
+      }
     } else {
-      this.error = res.error || 'No se pudo cargar el catálogo.';
+      this.error = resC.error || resG.error || 'No se pudo cargar la información.';
     }
     this.cargando = false;
   },
 
   async crear() {
+    // Convertimos el formato tipo '2.12' (2 min 12 seg) a segundos totales
+    let partes = String(this.duracionInput).split('.');
+    let minutos = parseInt(partes[0]) || 0;
+    let segundos = parseInt(partes[1]) || 0;
+    let duracionSegundos = (minutos * 60) + segundos;
+
     const res = await this.$api.canciones.crear({
       titulo: this.titulo,
       artista: this.artista,
       album: this.album,
       anio: Number(this.anio),
-      duracion: Number(this.duracion),
+      duracion: duracionSegundos,
       generoId: Number(this.generoId)
     });
+
     if (res.ok) {
       this.titulo = '';
       this.artista = '';
       this.album = '';
+      this.duracionInput = '3.00';
       await this.cargar();
     } else {
       alert(res.error);
@@ -107,13 +123,17 @@
             <input type="number" x-model="anio" class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
           </div>
           <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Duración (s)</label>
-            <input type="number" x-model="duracion" class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
+            <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Duración (min)</label>
+            <input type="text" x-model="duracionInput" placeholder="Ej. 2.12" class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
           </div>
         </div>
         <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Género ID</label>
-          <input type="number" x-model="generoId" class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
+          <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Género</label>
+          <select x-model="generoId" class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3.5 py-2 text-sm text-texto focus:border-acento focus:outline-none">
+            <template x-for="g in generos" :key="g.id">
+              <option :value="g.id" x-text="g.nombre"></option>
+            </template>
+          </select>
         </div>
         <button type="submit" class="w-full rounded-xl bg-boton px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90">
           Guardar Registro

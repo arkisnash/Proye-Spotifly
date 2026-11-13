@@ -20,3 +20,10 @@
 body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
 :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
 /* [IA] fin */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-texto, #fff);
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-superficie, #1e1b2e) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}

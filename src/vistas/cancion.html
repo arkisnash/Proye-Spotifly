@@ -1,4 +1,40 @@
-<section class="p-6">
+<section class="p-6" x-data="{
+  cancion: null,
+  cargando: true,
+  error: '',
+  async init() {
+    const id = window.location.hash.split('/')[2];
+    const res = await this.$api.canciones.obtener(id);
+    if (res.ok) this.cancion = res.data;
+    else this.error = res.error || 'No se encontró la canción.';
+    this.cargando = false;
+  }
+}">
   <h1 class="text-2xl font-bold text-acento">Detalle de canción</h1>
-  <p class="mt-2 text-texto-2">Vista pendiente (Persona 3).</p>
+  
+  <p x-show="cargando" class="mt-4 text-texto-2">Cargando canción...</p>
+  <p x-show="error" class="mt-4 text-red-400" x-text="error"></p>
+
+  <div x-show="!cargando && cancion" class="mt-6 rounded-2xl border border-borde bg-superficie p-6 shadow-sm space-y-4">
+    <div>
+      <h2 class="text-2xl font-extrabold text-texto" x-text="cancion?.titulo"></h2>
+      <p class="mt-1 text-base font-medium text-acento" x-text="cancion?.artista"></p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2 text-sm text-texto-2 border-t border-borde pt-4">
+      <p>Álbum: <strong class="text-texto" x-text="cancion?.album || 'N/A'"></strong></p>
+      <p>Año: <strong class="text-texto" x-text="cancion?.anio || 'N/A'"></strong></p>
+    </div>
+
+    <div class="pt-4 border-t border-borde">
+      <button type="button" @click="$store.reproductor.reproducir(cancion)"
+        class="rounded-lg bg-boton px-4 py-2 text-sm font-medium text-white">
+        Reproducir canción
+      </button>
+    </div>
+
+    <div class="pt-4">
+      <a href="#/" class="inline-flex items-center text-sm font-medium text-acento hover:underline">&larr; Volver al inicio</a>
+    </div>
+  </div>
 </section>

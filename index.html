@@ -33,18 +33,59 @@
       <button class="rounded-lg border border-campo p-2 md:hidden" aria-label="Abrir menú" :aria-expanded="menu" @click="menu = !menu">☰</button>
       <label class="sr-only" for="buscar">Buscar canciones, artistas o géneros</label>
       <input id="buscar" type="search" placeholder="Buscar canciones, artistas o géneros" x-model="$store.router.busqueda"
-        @keydown.enter="location.hash = '#/explorar'"
+        @input="if ($store.router.ruta !== 'explorar') location.hash = '#/explorar'"
         class="w-full max-w-xl rounded-lg border border-campo bg-superficie px-4 py-2 placeholder:text-texto-2" />
       <button class="ml-auto rounded-full border border-campo p-2" @click="$store.tema.alternar()"
         :aria-label="$store.tema.oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'" x-text="$store.tema.oscuro ? '☀' : '☾'"></button>
     </header>
-    <main class="flex-1 pb-24" x-html="$store.router.html"></main>
+    <main class="flex-1 pb-28" x-html="$store.router.html"></main>
   </div>
 
-  <!-- Barra del reproductor (pendiente: Persona 3) -->
-  <footer x-show="$store.sesion.usuario" class="fixed inset-x-0 bottom-0 z-20 border-t border-borde bg-lateral px-4 py-3 text-sm text-texto-2 md:pl-64">
-    Reproductor: sin canción seleccionada
+  <!-- [IA] inicio ia/2026-11-12_arkisnash_reproductor-global.md -->
+  <footer x-show="$store.sesion.usuario" class="fixed inset-x-0 bottom-0 z-20 border-t border-borde bg-lateral px-6 py-3 text-sm text-texto md:pl-64">
+    <div class="flex items-center justify-between gap-4">
+      <!-- Izquierda: Portada y datos de la canción -->
+      <div class="flex items-center gap-3 min-w-0 w-1/4">
+        <div class="size-11 shrink-0 rounded-lg bg-superficie border border-borde flex items-center justify-center text-acento font-bold">
+          <span x-text="$store.reproductor.actual ? '♪' : '–'"></span>
+        </div>
+        <div class="min-w-0">
+          <p class="font-semibold truncate text-texto" x-text="$store.reproductor.actual?.titulo || 'Sin canción seleccionada'"></p>
+          <p class="text-xs text-texto-2 truncate" x-text="$store.reproductor.actual?.artista || 'Elige una pista para reproducir'"></p>
+        </div>
+      </div>
+
+      <!-- Centro: Controles y barra de progreso -->
+      <div class="flex flex-col items-center flex-1 max-w-xl">
+        <div class="flex items-center gap-5 mb-1">
+          <button type="button" @click="$store.reproductor.irA(0)" class="text-texto-2 hover:text-texto" title="Reiniciar">⏮</button>
+          <button type="button" @click="$store.reproductor.alternar()"
+            :disabled="!$store.reproductor.actual"
+            class="size-9 rounded-full bg-texto text-fondo flex items-center justify-center font-bold disabled:opacity-40 hover:scale-105 transition">
+            <span x-text="$store.reproductor.sonando ? '⏸' : '▶'"></span>
+          </button>
+          <button type="button" @click="$store.reproductor.irA($store.reproductor.duracion)" class="text-texto-2 hover:text-texto" title="Final">⏭</button>
+        </div>
+        <div class="flex items-center gap-2 w-full text-xs text-texto-2">
+          <span class="w-8 text-right" x-text="$store.reproductor.formato($store.reproductor.tiempo)"></span>
+          <input type="range" min="0" :max="$store.reproductor.duracion || 100" :value="$store.reproductor.tiempo"
+            @input="$store.reproductor.irA($event.target.value)"
+            :disabled="!$store.reproductor.actual"
+            class="h-1.5 flex-1 cursor-pointer accent-acento" />
+          <span class="w-8" x-text="$store.reproductor.formato($store.reproductor.duracion)"></span>
+        </div>
+      </div>
+
+      <!-- Derecha: Volumen -->
+      <div class="hidden sm:flex items-center justify-end gap-2 w-1/4 text-texto-2">
+        <span>🔊</span>
+        <input type="range" min="0" max="1" step="0.05" :value="$store.reproductor.volumen"
+          @input="$store.reproductor.cambiarVolumen($event.target.value)"
+          class="w-24 h-1.5 cursor-pointer accent-acento" />
+      </div>
+    </div>
   </footer>
+  <!-- [IA] fin -->
 
   <div class="fixed right-4 top-4 z-50 flex flex-col gap-2" role="status" aria-live="polite">
     <template x-for="t in $store.toast.items" :key="t.id">

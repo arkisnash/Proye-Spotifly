@@ -1,43 +1,58 @@
-<!-- [IA] inicio · ia/2026-11-10_Thomas1-byte_explorar.md -->
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Catálogo de canciones</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-<body class="bg-gray-950 text-white">
-
-<section class="mx-auto max-w-3xl p-6" x-data="{
-  canciones: [], generos: [], busqueda: '', genero: '', cargando: true, error: '',
+<!-- [IA] inicio ia/2026-11-10_thomas1-byte_explorar.md -->
+<!-- [IA] inicio ia/2026-11-12_arkisnash_tarjetas-y-playlists.md -->
+<section class="mx-auto max-w-4xl p-6" x-data="{
+  canciones: [], generos: [], playlists: [], genero: '', menuAbierto: null, cargando: true, error: '',
 
   async init() {
-    const [c, g] = await Promise.all([this.$api.canciones.listar(), this.$api.generos.listar()]);
+    const [c, g, p] = await Promise.all([
+      this.$api.canciones.listar(),
+      this.$api.generos.listar(),
+      this.$api.playlists.listar()
+    ]);
     if (c.ok && g.ok) { this.canciones = c.data; this.generos = g.data; }
     else { this.error = c.error || g.error; }
+    if (p.ok) this.playlists = p.data;
     this.cargando = false;
   },
 
-  nombreGenero(id) { return this.generos.find((g) => g.id === id)?.nombre; },
+  nombreGenero(id) { return this.generos.find((g) => g.id === id)?.nombre || 'General'; },
 
   get resultado() {
-    const q = this.busqueda.trim().toLowerCase();
+    const q = ($store.router.busqueda || '').trim().toLowerCase();
     return this.canciones.filter((c) =>
-      (!q || (c.titulo + ' ' + c.artista).toLowerCase().includes(q)) &&
+      (!q || (c.titulo + ' ' + c.artista + ' ' + this.nombreGenero(c.generoId)).toLowerCase().includes(q)) &&
       (!this.genero || c.generoId == this.genero));
   },
 
-  duracion(seg) { return Math.floor(seg / 60) + ':' + String(seg % 60).padStart(2, '0'); },
-}">
+  async agregarAPlaylist(playlist, cancionId) {
+    const ids = playlist.cancionIds || [];
+    if (ids.includes(cancionId)) {
+      $store.toast.mostrar('La canción ya está en &quot;' + playlist.nombre + '&quot;');
+      this.menuAbierto = null;
+      return;
+    }
+    const res = await this.$api.playlists.actualizar(playlist.id, {
+      cancionIds: [...ids, cancionId],
+    });
+    if (res.ok) {
+      playlist.cancionIds = res.data.cancionIds;
+      $store.toast.mostrar('Agregada a &quot;' + playlist.nombre + '&quot;');
+    }
+    this.menuAbierto = null;
+  },
 
-  <h1 class="text-2xl font-bold text-acento">Explorar</h1>
+  duracion(seg) { return Math.floor(seg / 60) + ':' + String(seg % 60).padStart(2, '0'); }
+}" @click.outside="menuAbierto = null">
 
-  <div class="mt-4 grid gap-3 sm:grid-cols-2">
-    <input type="search" x-model="busqueda" placeholder="Buscar por título o artista"
-      class="rounded-lg border border-campo bg-superficie px-4 py-2" />
-    <select x-model="genero" class="rounded-lg border border-campo bg-superficie px-4 py-2">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-acento">Explorar</h1>
+      <p x-show="$store.router.busqueda" class="text-xs text-texto-2 mt-1">
+        Filtrando por: <strong class="text-texto" x-text="$store.router.busqueda"></strong>
+      </p>
+    </div>
+
+    <select x-model="genero" class="rounded-lg border border-campo bg-superficie px-4 py-2 text-sm">
       <option value="">Todos los géneros</option>
       <template x-for="g in generos" :key="g.id">
         <option :value="g.id" x-text="g.nombre"></option>
@@ -45,22 +60,56 @@
     </select>
   </div>
 
+  <p x-show="cargando" class="mt-4 text-texto-2">Cargando canciones…</p>
+  <p x-show="error" class="mt-4 text-red-400" x-text="error"></p>
 
-  <p class="mt-4 text-sm text-gray-400" x-text="resultado.length + ' canciones'"></p>
+  <p class="mt-4 text-sm text-texto-2" x-text="resultado.length + ' canciones encontradas'"></p>
 
-  <!-- Vacío -->
-  <p x-show="resultado.length === 0" class="mt-6 text-gray-400">No hay canciones con esos filtros.</p>
+  <p x-show="!cargando && resultado.length === 0" class="mt-6 text-texto-2">No hay canciones con esos filtros.</p>
 
-  <!-- Lista -->
   <ul class="mt-4 grid gap-3 sm:grid-cols-2">
-  <template x-for="c in resultado" :key="c.id">
-    <li class="rounded-xl border border-borde bg-superficie p-4">
-      <p class="font-semibold text-acento" x-text="c.titulo"></p>
-      <p class="text-sm text-texto-2" x-text="c.artista + ' · ' + nombreGenero(c.generoId)"></p>
-    </li>
-  </template>
-</ul>
+    <template x-for="c in resultado" :key="c.id">
+      <li class="group relative flex items-center gap-3.5 rounded-xl border border-borde bg-superficie p-3 hover:border-acento/60 transition">
+        <!-- Botón Play estilo YouTube Music -->
+        <button type="button" @click="$store.reproductor.reproducir(c)"
+          class="relative size-12 shrink-0 overflow-hidden rounded-lg border border-borde bg-fondo flex items-center justify-center text-white hover:bg-boton transition cursor-pointer"
+          :class="$store.reproductor.actual?.id === c.id && 'border-acento bg-boton/20'"
+          :title="'Reproducir ' + c.titulo">
+          <span class="text-base" x-text="$store.reproductor.actual?.id === c.id && $store.reproductor.sonando ? '⏸' : '▶'"></span>
+        </button>
 
-</body>
-</html>
+        <!-- Datos de la canción -->
+        <div class="min-w-0 flex-1">
+          <a :href="'#/cancion/' + c.id" class="block font-semibold text-texto hover:text-acento truncate" x-text="c.titulo"></a>
+          <p class="text-xs text-texto-2 truncate" x-text="c.artista + ' · ' + nombreGenero(c.generoId) + ' · ' + duracion(c.duracion)"></p>
+        </div>
+
+        <!-- Menú 3 puntos (⋮) -->
+        <div class="relative">
+          <button type="button" @click.stop="menuAbierto = (menuAbierto === c.id ? null : c.id)"
+            class="size-8 rounded-full hover:bg-fondo flex items-center justify-center text-texto-2 hover:text-texto cursor-pointer text-lg font-bold"
+            aria-label="Más opciones">⋮</button>
+
+          <div x-show="menuAbierto === c.id" @click.stop
+            class="absolute right-0 top-9 z-30 w-56 rounded-xl border border-borde bg-lateral p-1.5 shadow-2xl text-sm">
+            <a :href="'#/cancion/' + c.id" class="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-superficie text-texto">
+              <span>ℹ</span> Ver detalles de canción
+            </a>
+            <div class="my-1 border-t border-borde"></div>
+            <p class="px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-texto-2">Agregar a playlist</p>
+            <template x-for="p in playlists" :key="p.id">
+              <button type="button" @click="agregarAPlaylist(p, c.id)"
+                class="w-full text-left rounded-lg px-3 py-1.5 hover:bg-superficie text-texto truncate cursor-pointer"
+                x-text="'+ ' + p.nombre"></button>
+            </template>
+            <a x-show="playlists.length === 0" href="#/biblioteca" class="block px-3 py-1.5 text-xs text-acento hover:underline">
+              Crear playlist en Biblioteca &rarr;
+            </a>
+          </div>
+        </div>
+      </li>
+    </template>
+  </ul>
+</section>
+<!-- [IA] fin -->
 <!-- [IA] fin -->

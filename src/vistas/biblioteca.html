@@ -1,29 +1,81 @@
 <!-- [IA] inicio · ia/2026-11-12_Thomas1-byte_biblioteca-base.md -->
-<section class="p-6" x-data="{
+<!-- [IA] inicio ia/2026-11-12_arkisnash_tarjetas-y-playlists.md -->
+<section class="p-6 max-w-5xl mx-auto" x-data="{
   playlists: [],
+  nuevoNombre: '',
+  nuevaDesc: '',
+  cargando: true,
 
   async init() {
     const r = await $api.playlists.listar();
     if (r.ok) this.playlists = r.data;
+    this.cargando = false;
   },
+
+  async crearPlaylist() {
+    const nombre = this.nuevoNombre.trim();
+    if (!nombre) return;
+    const res = await $api.playlists.crear({
+      nombre,
+      descripcion: this.nuevaDesc.trim() || 'Playlist personalizada',
+      cancionIds: []
+    });
+    if (res.ok) {
+      this.playlists.push(res.data);
+      this.nuevoNombre = '';
+      this.nuevaDesc = '';
+      $store.toast.mostrar('Playlist creada correctamente');
+    }
+  },
+
+  async eliminarPlaylist(id) {
+    const res = await $api.playlists.eliminar(id);
+    if (res.ok) {
+      this.playlists = this.playlists.filter((p) => p.id !== id);
+      $store.toast.mostrar('Playlist eliminada');
+    }
+  }
 }">
 
-  <h1 class="text-2xl font-bold text-acento">Biblioteca</h1>
+  <h1 class="text-2xl font-bold text-acento">Biblioteca · Mis Playlists</h1>
 
-  <p class="mt-2 text-sm text-texto-2" x-text="playlists.length + ' playlists'"></p>
+  <!-- Formulario para crear nueva playlist -->
+  <form @submit.prevent="crearPlaylist()" class="mt-4 flex flex-wrap gap-3 rounded-xl border border-borde bg-superficie p-4">
+    <input type="text" x-model="nuevoNombre" placeholder="Nombre de la nueva playlist" required
+      class="flex-1 min-w-[200px] rounded-lg border border-campo bg-fondo px-3 py-2 text-sm" />
+    <input type="text" x-model="nuevaDesc" placeholder="Descripción (opcional)"
+      class="flex-1 min-w-[200px] rounded-lg border border-campo bg-fondo px-3 py-2 text-sm" />
+    <button type="submit" class="rounded-lg bg-boton px-4 py-2 text-sm font-semibold text-white hover:opacity-90 cursor-pointer">
+      + Crear playlist
+    </button>
+  </form>
 
-  <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+  <p class="mt-4 text-sm text-texto-2" x-text="playlists.length + ' playlists disponibles'"></p>
+
+  <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
     <template x-for="p in playlists" :key="p.id">
-      <li>
-        <a :href="'#/playlist/' + p.id"
-          class="block rounded-xl border border-borde bg-superficie p-4 hover:border-acento">
-          <p class="font-semibold text-acento" x-text="p.nombre"></p>
-          <p class="text-sm text-texto-2" x-text="p.descripcion"></p>
-          <p class="mt-2 text-xs text-texto-2" x-text="p.cancionIds.length + ' canciones'"></p>
-        </a>
+      <li class="flex flex-col justify-between rounded-xl border border-borde bg-superficie p-5 hover:border-acento/60 transition">
+        <div>
+          <a :href="'#/playlist/' + p.id" class="text-lg font-bold text-acento hover:underline block truncate" x-text="p.nombre"></a>
+          <p class="mt-1 text-sm text-texto-2 line-clamp-2" x-text="p.descripcion"></p>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between border-t border-borde pt-3">
+          <span class="text-xs text-texto-2" x-text="(p.cancionIds?.length || 0) + ' canciones'"></span>
+          <div class="flex items-center gap-2">
+            <a :href="'#/playlist/' + p.id"
+              class="rounded-lg bg-fondo border border-borde px-3 py-1 text-xs font-medium text-texto hover:border-acento">
+              Abrir
+            </a>
+            <button type="button" @click="eliminarPlaylist(p.id)"
+              class="rounded-lg border border-red-500/40 px-2.5 py-1 text-xs text-red-400 hover:bg-red-500/10 cursor-pointer">
+              Eliminar
+            </button>
+          </div>
+        </div>
       </li>
     </template>
   </ul>
-
 </section>
+<!-- [IA] fin -->
 <!-- [IA] fin -->

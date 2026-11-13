@@ -1,2 +1,5 @@
 [{"id":1,"nombre":"Admin BST","correo":"admin@bst.cl","clave":"admin123","rol":"admin"},
-{"id":2,"nombre":"Usuario de prueba","correo":"usuario@bst.cl","clave":"bst12345","rol":"usuario"}]
+{"id":2,"nombre":"Usuario de prueba","correo":"usuario@bst.cl","clave":"bst12345","rol":"usuario"},
+{"id": 3, "nombre": "Benjamín Ayala", "correo": "benjamin@bst.cl", "clave": "123456", "rol": "admin"},
+{"id": 4, "nombre": "Thomas Cisternas", "correo": "thomas@bst.cl", "clave": "123456", "rol": "usuario"},
+{"id": 5, "nombre": "Sebastián Pino", "correo": "sebastian@bst.cl", "clave": "123456", "rol": "usuario"}]

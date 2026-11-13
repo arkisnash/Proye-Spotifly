@@ -1,4 +1,165 @@
-<section class="p-6">
-  <h1 class="text-2xl font-bold text-acento">Administración</h1>
-  <p class="mt-2 text-texto-2">Vista pendiente (opcional).</p>
+<!-- [IA] inicio ia/2026-11-12_arkisnash_panel-admin.md -->
+<section class="p-6 max-w-5xl mx-auto" x-data="{
+  canciones: [],
+  cargando: true,
+  error: '',
+  titulo: '',
+  artista: '',
+  album: '',
+  anio: 2026,
+  duracion: 180,
+  generoId: 1,
+
+  async init() {
+    await this.cargar();
+  },
+
+  async cargar() {
+    this.cargando = true;
+    this.error = '';
+    const res = await this.$api.canciones.listar();
+    if (res.ok) {
+      this.canciones = res.data;
+    } else {
+      this.error = res.error || 'No se pudo cargar el catálogo.';
+    }
+    this.cargando = false;
+  },
+
+  async crear() {
+    const res = await this.$api.canciones.crear({
+      titulo: this.titulo,
+      artista: this.artista,
+      album: this.album,
+      anio: Number(this.anio),
+      duracion: Number(this.duracion),
+      generoId: Number(this.generoId)
+    });
+    if (res.ok) {
+      this.titulo = '';
+      this.artista = '';
+      this.album = '';
+      await this.cargar();
+    } else {
+      alert(res.error);
+    }
+  },
+
+  async eliminar(id) {
+    if (!confirm('¿Estás seguro de eliminar esta canción del sistema?')) return;
+    const res = await this.$api.canciones.eliminar(id);
+    if (res.ok) {
+      await this.cargar();
+    } else {
+      alert(res.error);
+    }
+  }
+}">
+  <!-- Encabezado profesional -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between border-b border-borde pb-5">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-acento">Panel de Administración</h1>
+      <p class="mt-1 text-sm text-texto-2">Gestión avanzada del catálogo y control de registros (CRUD)</p>
+    </div>
+    <div class="mt-4 md:mt-0 flex items-center gap-3">
+      <span class="inline-flex items-center rounded-full bg-superficie border border-borde px-3 py-1 text-xs font-medium text-texto">
+        Rol: <strong class="text-acento ml-1">Administrador</strong>
+      </span>
+    </div>
+  </div>
+
+  <!-- Estados de Carga y Error -->
+  <div x-show="cargando" class="py-12 text-center">
+    <p class="text-texto-2 animate-pulse">Cargando registros del sistema…</p>
+  </div>
+
+  <div x-show="error" class="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-red-400">
+    <p class="font-semibold">Ocurrió un error</p>
+    <p class="text-sm mt-1" x-text="error"></p>
+    <button @click="cargar()" class="mt-3 rounded-lg bg-red-500 px-3 py-1.5 text-xs text-white font-medium hover:bg-red-600">Reintentar</button>
+  </div>
+
+  <div x-show="!cargando && !error" class="mt-8 grid gap-8 lg:grid-cols-3">
+    <!-- Formulario de Creación -->
+    <div class="lg:col-span-1 rounded-2xl border border-borde bg-superficie p-6 shadow-sm">
+      <h2 class="text-lg font-bold text-texto">Agregar Canción</h2>
+      <p class="text-xs text-texto-2 mt-0.5">Ingresa los datos para el catálogo</p>
+
+      <form @submit.prevent="crear()" class="mt-4 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Título</label>
+          <input type="text" x-model="titulo" required placeholder="Ej. Song 2"
+            class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3.5 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Artista</label>
+          <input type="text" x-model="artista" required placeholder="Ej. Blur"
+            class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3.5 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Álbum</label>
+          <input type="text" x-model="album" placeholder="Ej. Blur"
+            class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3.5 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Año</label>
+            <input type="number" x-model="anio" class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Duración (s)</label>
+            <input type="number" x-model="duracion" class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-texto-2">Género ID</label>
+          <input type="number" x-model="generoId" class="mt-1 w-full rounded-lg border border-campo bg-fondo px-3 py-2 text-sm text-texto focus:border-acento focus:outline-none" />
+        </div>
+        <button type="submit" class="w-full rounded-xl bg-boton px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90">
+          Guardar Registro
+        </button>
+      </form>
+    </div>
+
+    <!-- Tabla de Registros -->
+    <div class="lg:col-span-2 rounded-2xl border border-borde bg-superficie p-6 shadow-sm flex flex-col">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-bold text-texto">Catálogo Actual</h2>
+          <p class="text-xs text-texto-2" x-text="canciones.length + ' elementos registrados'"></p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left text-sm text-texto">
+          <thead>
+            <tr class="border-b border-borde text-xs uppercase tracking-wider text-texto-2">
+              <th class="pb-3 font-semibold">ID</th>
+              <th class="pb-3 font-semibold">Título / Artista</th>
+              <th class="pb-3 font-semibold">Álbum</th>
+              <th class="pb-3 font-semibold text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-borde/50">
+            <template x-for="c in canciones" :key="c.id">
+              <tr class="group hover:bg-fondo/40 transition">
+                <td class="py-3 text-texto-2 text-xs font-mono" x-text="c.id"></td>
+                <td class="py-3">
+                  <p class="font-semibold text-acento" x-text="c.titulo"></p>
+                  <p class="text-xs text-texto-2" x-text="c.artista"></p>
+                </td>
+                <td class="py-3 text-xs text-texto-2" x-text="c.album || 'N/A'"></td>
+                <td class="py-3 text-right">
+                  <button @click="eliminar(c.id)" class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500 hover:text-white">
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </section>
+<!-- [IA] fin -->

@@ -1,3 +1,4 @@
+// [IA] inicio ia/2026-11-05_arkisnash_esqueleto-base.md
 ﻿// [IA] inicio ia/2026-11-12_arkisnash_tarjetas-y-playlists.md
 import { api } from '../api/index.js';
 
@@ -47,4 +48,4 @@ export default (Alpine) => {
     init() { this.cargar(); },
   }));
 };
-// [IA] fin
+// [IA] fin// [IA] fin

@@ -19,8 +19,10 @@ Node.js 20.19 o superior y navegador web moderno (Chrome, Edge o Firefox).
 
 ## Estructura
 - `src/vistas/`: una vista por archivo (`.html` y, si hace falta, un `.js` con `Alpine.data`).
+- `src/main.js`: inicialización de Alpine, stores globales (`tema`, `sesion`, `toast`, `router` y `reproductor` de audio persistente).
 - `src/api/index.js`: capa de servicios (latencia 300-800 ms, formato `{ ok, status, data, error }`, escrituras en `localStorage`). `api.config.probabilidadFallo` fuerza errores.
 - `public/mocks/`: un JSON por recurso (`canciones.json`, `generos.json`, `playlists.json`, `usuarios.json`).
+- `public/audios/`: pistas MP3 locales integradas con el reproductor global inferior.
 - `src/css/app.css`: paleta clara y oscura (variables).
 - `ia/`: registro del uso de IA en [ia/README.md](ia/README.md).
 
@@ -45,12 +47,12 @@ Node.js 20.19 o superior y navegador web moderno (Chrome, Edge o Firefox).
 
 ## Vistas y rutas configuradas
 - `#/login` y `#/registro`: rutas públicas de acceso y registro (el router redirige a `#/login` si no hay sesión activa).
-- `#/` (inicio): vista principal con listado de canciones desde el menú lateral.
-- `#/explorar`: catálogo con buscador y filtros por género desde el menú lateral.
-- `#/biblioteca`: ruta del menú lateral para playlists del usuario.
-- `#/cancion/:id` y `#/playlist/:id`: rutas dinámicas por parámetro para ver el detalle de canción o playlist.
-- `#/perfil` y `#/configuracion`: rutas del menú lateral para datos de usuario y ajustes.
-- `#/admin`: ruta protegida en el menú lateral exclusiva para usuarios con rol `admin`.
+- `#/` (inicio): vista principal con listado de canciones, reproducción rápida y menú contextual (⋮) para agregar a playlists.
+- `#/explorar`: catálogo conectado al buscador global superior y filtro por géneros.
+- `#/biblioteca`: creación, listado y eliminación de playlists del usuario.
+- `#/cancion/:id` y `#/playlist/:id`: rutas dinámicas por parámetro para ver el detalle de canción o administrar pistas de una playlist.
+- `#/perfil` y `#/configuracion`: rutas del menú lateral para datos de usuario y ajustes de la aplicación.
+- `#/admin`: ruta protegida en el menú lateral exclusiva para usuarios con rol `admin` (CRUD de canciones, géneros y usuarios).
 - `#/404`: vista mostrada por el router cuando la ruta no existe.
 
 ## Reglas del equipo

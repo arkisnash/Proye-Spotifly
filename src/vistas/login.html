@@ -1,6 +1,7 @@
 <section class="p-6 max-w-md mx-auto" x-data="{
   correo: '',
   clave: '',
+  recordar: true,
   error: '',
 
   async entrar() {
@@ -30,6 +31,14 @@
       <label class="block text-sm text-texto">Contraseña</label>
       <input type="password" x-model="clave" required
         class="mt-1 w-full rounded-lg border border-borde bg-superficie px-3 py-2 text-texto" />
+    </div>
+    
+    <div class="flex items-center justify-between text-sm my-3">
+      <label class="flex items-center gap-2 cursor-pointer text-texto-2">
+        <input type="checkbox" x-model="recordar"
+          class="rounded border-borde bg-superficie text-acento focus:ring-0" />
+        Recordar sesión
+      </label>
     </div>
 
     <button type="submit" class="w-full rounded-lg bg-boton px-4 py-2 font-medium text-white">
